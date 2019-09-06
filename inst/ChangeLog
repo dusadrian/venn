@@ -1,0 +1,50 @@
+Version 1.7
+    o Bug fix, when the input in the venn() function is a QCA solution.
+    o Argument "counts" in function venn() is now used as a numerical vector for
+      the set intersections (thanks to William Robbins for the suggestion)
+
+Version 1.6
+    o Major change in the treatment of custom intersections, the package
+      now supports set unions (using the plus sign), as well as set intersections.
+      Multiple intersections are now separated with a comma.
+    o New argument "borders" to function venn(), defaulted to TRUE in order to
+      preserve backwards compatibility. When deactivated, only the custom
+      intersections will be plotted.
+
+Version 1.5
+    o Adaptation to package QCA version 3.0
+    o Replaced the argument "nofsets" with "snames", in function getZones()
+    o Argument "transparency" renamed to "opacity"
+    o Arguments "zcolor" and "col" in function venn() now accept a single character
+      expression, as well as a character vector to specify colors
+    o Removed suggestion to package QCAGUI, which is now merged into package QCA
+    o Argument cexil in function venn() is now defaulted to 0.6, with an automatic
+      change to 0.5 for six sets and 0.45 for seven sets
+    o When the input is a list, invisibly return the truth table and the counts for
+      each intersection, with an attribute called "intersections" containing its 
+      elements (thanks to Jeena Ganga for the suggestion)
+
+Version 1.2
+    o Adaptation to package QCA version 2.2 
+    o Fixed a bug when interpreting a SOP expression, the negation of a set
+      was interpreted as the set itself
+    o When the expression is a valid R statement, quoting is not necessary
+      anymore
+
+Version 1.1
+    o Fixed minor bugs
+    o New feature to draw a Venn diagram using a SOP (sum of products) expression
+    o QCA type objects can have transparency based on the inclusion score
+    o Parameters for borders can have lengths, recycled to the length of zones
+    
+      The following were all suggested by Tom Wenseleers (with thanks):
+      
+    o The plot window is now forced to a square, using asp = 1
+    o New shapes for 4 and 5 sets, to maximize the space for intersections
+    o Default color styles, and associated border colors
+    o Variable text size for the intersection labels and for the set names
+    
+    
+Version 1.0
+    o First version of the package
+

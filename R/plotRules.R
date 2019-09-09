@@ -1,5 +1,6 @@
 `plotRules` <-
-function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3, allborders = TRUE, ...) {
+function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
+         allborders = TRUE, box = TRUE, ...) {
     
     # s - sets; v - version; b - borders; x,y - coordinates
     # borders <- read.csv(file.path(system.file("data", package="venn"), "borders.csv.gz"))
@@ -71,7 +72,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3, allborders = TRUE
         
         allwhole <- all(wholesets > 0)
         
-        # verify if the ruless cover all sets
+        # verify if the rules cover all sets
         allsets <- length(rules) == nofsets & allwhole
         
         
@@ -81,12 +82,12 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3, allborders = TRUE
         
         zones <- vector("list", length(wholesets))
         
-        iregular <- unlist(lapply(rowns, function(x) any(x == 0)))
+        irregular <- unlist(lapply(rowns, function(x) any(x == 0)))
         
         
-        if (any(iregular)) { # inverse, the area outside a shape (or outside all shapes)
+        if (any(irregular)) { # inverse, the area outside a shape (or outside all shapes)
             
-            for (i in which(iregular)) {
+            for (i in which(irregular)) {
                 zones[[i]] <- getZones(rowns[[i]], nofsets, ellipse)
                 polygons <- rbind(zeroset, rep(NA, 2), zones[[i]][[1]])
                 polygons <- polygons[-nrow(polygons), ] # needed...?
@@ -95,7 +96,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3, allborders = TRUE
         }
         
         
-        if (any(!iregular)) { # normal shapes
+        if (any(!irregular)) { # normal shapes
             
             if (any(wholesets > 0)) {
                 for (i in which(wholesets > 0)) {
@@ -105,14 +106,14 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3, allborders = TRUE
             }
             
             if (any(wholesets == 0)) {
-                for (i in which(wholesets == 0 & !iregular)) {
+                for (i in which(wholesets == 0 & !irregular)) {
                     zones[[i]] <- getZones(rowns[[i]], nofsets, ellipse)
                 }
             }
             
             
             for (i in seq(length(zones))) {
-                if (!iregular[i]) {
+                if (!irregular[i]) {
                     for (j in seq(length(zones[[i]]))) {
                         polygon(zones[[i]][[j]], col = adjustcolor(zcolor[i], alpha.f = opacity), border = NA)
                     }
@@ -144,8 +145,9 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3, allborders = TRUE
     
     
     other.args <- list(...)
-    
-    lines(zeroset)
+    if (box) {
+        lines(zeroset)
+    }
     
     if (!identical(zcolor, "bw")) {
         # border colors, a bit darker

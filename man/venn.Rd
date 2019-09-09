@@ -12,7 +12,7 @@ up to 7 sets.
 \usage{
 venn(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
      zcolor = "bw", opacity = 0.3, size = 15, cexil = 0.6, cexsn = 0.85,
-     borders = TRUE, ...)
+     borders = TRUE, box = TRUE, par = TRUE, ...)
 }
 
 \arguments{
@@ -30,6 +30,8 @@ venn(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
   \item{cexil}{Character expansion for the intersection labels}
   \item{cexsn}{Character expansion for the set names}
   \item{borders}{Logical: draw all intersection borders}
+  \item{box}{Logical: draw the outside square}
+  \item{par}{Logical: use the default, custom plot parameters}
   \item{...}{Additional parameters, mainly for the outer borders of the sets}
 }
 
@@ -128,6 +130,12 @@ package is an adaptation from Mamakani, K., Myrvold W. and F. Ruskey (2011).
 
 The argument \bold{\code{border}} can be used only for custom intersections and/or unions,
 it has no effect when \bold{\code{x}} is a list, or a data frame, or a truth table object.
+
+The argument \bold{\code{par}} is used to define a custom set of parameters when producing
+the plot, to ensure a square shape of about 15 cm and eliminate the outer regions. If
+deactivated, users can define their own size and shape of the plot using the system function
+\bold{\code{par()}}. Either way, the plot is always produced using a size of 1000 points for
+both horizontal and vertical.
 }
 
 

@@ -1,7 +1,7 @@
 `venn` <-
 function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
      zcolor = "bw", opacity = 0.3, size = 15, cexil = 0.6, cexsn = 0.85,
-     borders = TRUE, ...) {
+     borders = TRUE, box = TRUE, par = TRUE, ...) {
     
     if (missing(x)) {
         cat("\n")
@@ -363,10 +363,10 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     #        opacity = opacity, allborders = borders, ... = ...))
     
     if (!ttqca) {
-        openPlot(size)
+        openPlot(size, par = par)
     }
     
-    plotRules(x, zcolor, ellipse, opacity, allborders = borders, ... = ...)
+    plotRules(x, zcolor, ellipse, opacity, allborders = borders, box = box, ... = ...)
     
     
     scoords <- data.frame(
@@ -409,5 +409,3 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         return(invisible(tt))
     }
 }
-
-

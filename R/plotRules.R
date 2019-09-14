@@ -100,7 +100,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
             
             if (any(wholesets > 0)) {
                 for (i in which(wholesets > 0)) {
-                    # [[1]] simulez getZones() pentru ca uneori pot fi mai multe zone
+                    # [[1]] simulates getZones() because sometimes there might be multipe zones
                     zones[[i]][[1]] <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == wholesets[i], c("x", "y")]
                 }
             }

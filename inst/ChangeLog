@@ -1,3 +1,9 @@
+Version 1.8
+    o New arguments "box" and "par" to function venn(), thanks to Mehrad
+      Mahmoudian for the suggestion
+    o function venn() now accepts set names containing spaces (thanks to
+      Andre Gohr for the suggestion)
+
 Version 1.7
     o Bug fix, when the input in the venn() function is a QCA solution.
     o Argument "counts" in function venn() is now used as a numerical vector for
@@ -6,7 +12,7 @@ Version 1.7
 Version 1.6
     o Major change in the treatment of custom intersections, the package
       now supports set unions (using the plus sign), as well as set intersections.
-      Multiple intersections are now separated with a comma.
+      Multiple intersections / expressions are now separated with a comma.
     o New argument "borders" to function venn(), defaulted to TRUE in order to
       preserve backwards compatibility. When deactivated, only the custom
       intersections will be plotted.

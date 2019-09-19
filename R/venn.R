@@ -8,11 +8,6 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         stop(simpleError("Argument \"x\" is missing.\n\n"))
     }
     
-    splitstr <- function(x, split = ",") {
-        gsub("\\n", "", unlist(strsplit(gsub("[[:space:]]", "", x), split = split)))
-    }
-    
-    
     # to see what's in the "..." argument
     funargs <- unlist(lapply(match.call(), deparse)[-1])
     
@@ -39,7 +34,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     nofsets <- 0
     
     if (!identical(snames, "")) {
-        snames <- splitstr(snames)
+        snames <- admisc::splitstr(snames, venn = TRUE)
         nofsets <- length(snames)
     }
     
@@ -210,12 +205,12 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             nofsets <- length(snames)
         }
         
-        x <- splitstr(x)
+        x <- admisc::splitstr(x, venn = TRUE)
         
         if (all(grepl("[A-Za-z]", x))) { # x can be something like c("A", "B*c")
             
             if (identical(snames, "")) {
-                y <- admisc::translate(paste(x, collapse = "+"), snames = snames)
+                y <- admisc::translate(paste(x, collapse = "+"), snames = snames, venn = TRUE)
                 snames <- colnames(x)
                 nofsets <- length(snames)
             }
@@ -236,7 +231,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             }
             
             if (nofsets == 0) {
-                nofsets <- unique(nchar(splitstr(x, split = "\\+")))
+                nofsets <- unique(nchar(strsplit(x, split = "\\+")))
             }
             
             x <- as.list(x)

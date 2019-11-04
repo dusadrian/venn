@@ -1,16 +1,32 @@
 `venn` <-
 function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
-     zcolor = "bw", opacity = 0.3, size = 15, cexil = 0.6, cexsn = 0.85,
-     borders = TRUE, box = TRUE, par = TRUE, ...) {
+     zcolor = "bw", opacity = 0.3, size = 15, ilcs = 0.6, sncs = 0.85,
+     borders = TRUE, box = TRUE, par = TRUE, ggplot = FALSE, ...) {
     
     if (missing(x)) {
         cat("\n")
         stop(simpleError("Argument \"x\" is missing.\n\n"))
     }
+
+    if (ggplot) {
+        if (!requireNamespace("ggplot2", quietly = TRUE) | !requireNamespace("ggpolypath", quietly = TRUE)) {
+            cat("\n")
+            stop("Packages \"ggplot2\" and \"ggpolypath\" are needed to make this work, please install.", call. = FALSE)
+        }
+    }
     
     # to see what's in the "..." argument
     funargs <- unlist(lapply(match.call(), deparse)[-1])
     
+    
+    if (!is.element("cexil", names(funargs))) {
+        names(funargs)[which(names(funargs) == "cexil")] <- "ilcs"
+    }
+    
+    if (!is.element("cexsn", names(funargs))) {
+        names(funargs)[which(names(funargs) == "cexsn")] <- "sncs"
+    }
+
     if (inherits(tryCatch(eval(x), error = function(e) e), "error")) {
         x <- funargs["x"]
     }
@@ -34,7 +50,11 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     nofsets <- 0
     
     if (!identical(snames, "")) {
-        snames <- admisc::splitstr(snames, venn = TRUE)
+        if (!is.character(snames)) {
+            cat("\n")
+            stop(simpleError("The \"snames\" argument should be character.\n\n"))
+        }
+        if (length(snames) == 1) snames <- admisc::splitstr(snames)
         nofsets <- length(snames)
     }
     
@@ -118,9 +138,9 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         
         individual <- length(opacity) == nrow(tt)
         
-        ints <- read.csv(file.path(system.file("data", package="venn"), "ints.csv.gz"))
+        ints <- read.csv(file.path(system.file("data", package = "venn"), "ints.csv.gz"))
         
-        openPlot(size)
+        gvenn <- openPlot(size, par = par, ggplot = ggplot)
         
         if (individual) {
             
@@ -205,12 +225,13 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             nofsets <- length(snames)
         }
         
-        x <- admisc::splitstr(x, venn = TRUE)
+        # x <- admisc::splitstr(x) # this coerces to numbers, not good
+        x <- unlist(strsplit(gsub("[[:space:]]", "", x), split = ","))
         
         if (all(grepl("[A-Za-z]", x))) { # x can be something like c("A", "B*c")
             
             if (identical(snames, "")) {
-                y <- admisc::translate(paste(x, collapse = "+"), snames = snames, venn = TRUE)
+                y <- admisc::translate(paste(x, collapse = "+"), snames = snames)
                 snames <- colnames(x)
                 nofsets <- length(snames)
             }
@@ -231,7 +252,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             }
             
             if (nofsets == 0) {
-                nofsets <- unique(nchar(strsplit(x, split = "\\+")))
+                nofsets <- unique(nchar(unlist(strsplit(x, split = "\\+"))))
             }
             
             x <- as.list(x)
@@ -349,20 +370,21 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         }
     }
     
-    
-    if (!is.element("cexil", names(funargs))) {
-        cexil <- cexil - ifelse(nofsets > 5, 0.1, 0) - ifelse(nofsets > 6, 0.05, 0)
+    if (!is.element("ilcs", names(funargs))) {
+        if (!ggplot) {
+            ilcs <- ilcs - ifelse(nofsets > 5, 0.1, 0) - ifelse(nofsets > 6, 0.05, 0)
+        }
     }
     
     # return(list(as.name("plotRules"), rules = x, zcolor = zcolor, ellipse = ellipse,
     #        opacity = opacity, allborders = borders, ... = ...))
     
     if (!ttqca) {
-        openPlot(size, par = par)
+        gvenn <- openPlot(size, par = par, ggplot = ggplot)
     }
     
-    plotRules(x, zcolor, ellipse, opacity, allborders = borders, box = box, ... = ...)
-    
+    gvenn <- plotRules(x, zcolor, ellipse, opacity, allborders = borders, 
+                        box = box, gvenn = gvenn, ... = ...)
     
     scoords <- data.frame(
         s = c(1, rep(2, 2), rep(3, 3), rep(4, 4), rep(5, 10), rep(6, 6), rep(7, 7), rep(4, 4)),
@@ -379,11 +401,29 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             cts[cts == 0] <- ""
             ilabels <- cts
         }
-        text(icoords[icoords$s == nofsets & icoords$v == as.numeric(ellipse), c("x", "y")], labels = ilabels, cex = cexil)
+
+        icoords <- icoords[icoords$s == nofsets & icoords$v == as.numeric(ellipse), c("x", "y")]
+
+        if (ggplot) {
+            for (i in seq(length(ilabels))) {
+                gvenn <- gvenn + ggplot2::annotate("text", label = ilabels[i], x = icoords$x[i], y = icoords$y[i], size = ilcs)
+            }
+        }
+        else {
+            text(icoords, labels = ilabels, cex = ilcs)
+        }
     }
         
-    text(scoords[scoords$s == nofsets & scoords$v == as.numeric(ellipse), c("x", "y")], labels = snames, cex = cexsn)
-    
+    scoords <- scoords[scoords$s == nofsets & scoords$v == as.numeric(ellipse), c("x", "y")]
+    if (ggplot) {
+        for (i in seq(length(snames))) {
+            gvenn <- gvenn + ggplot2::annotate("text", label = snames[i], x = scoords$x[i], y = scoords$y[i], size = sncs)
+        }
+    }
+    else {
+        text(scoords, labels = snames, cex = sncs)
+    }
+
     if (ttqca) {
         # TRY 1: slow
         # for (i in 0:3) {
@@ -399,7 +439,11 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         points(seq(10, 340, length.out = 4), rep(-25, 4), pch = 22, bg = ttcolors, cex = 1.75)
         text(seq(40, 370, length.out = 4), rep(-26, 4), names(ttcolors), cex = 0.85)
     }
-    
+
+    if (ggplot) {
+        return(gvenn)
+    }
+
     if (listx) {
         return(invisible(tt))
     }

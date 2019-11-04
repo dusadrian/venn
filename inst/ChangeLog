@@ -1,8 +1,10 @@
 Version 1.8
-    o New arguments "box" and "par" to function venn(), thanks to Mehrad
-      Mahmoudian for the suggestion
-    o function venn() now accepts set names containing spaces (thanks to
-      Andre Gohr for the suggestion)
+    o New arguments "box", "par" and "ggplot" to function venn()
+      (thanks to Mehrad Mahmoudian for the suggestion)
+    o Arguments "cexil" and "cexsn" in function venn() 
+      renamed to "ilcs" and "sncs"
+    o Function venn() now accepts set names containing spaces
+      (thanks to Andre Gohr for the suggestion)
 
 Version 1.7
     o Bug fix, when the input in the venn() function is a QCA solution.

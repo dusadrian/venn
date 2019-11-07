@@ -9,6 +9,8 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     }
 
     if (ggplot) {
+        ilcs <- 2.5
+        sncs <- 3.5
         if (!requireNamespace("ggplot2", quietly = TRUE) | !requireNamespace("ggpolypath", quietly = TRUE)) {
             cat("\n")
             stop("Packages \"ggplot2\" and \"ggpolypath\" are needed to make this work, please install.", call. = FALSE)
@@ -18,7 +20,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     # to see what's in the "..." argument
     funargs <- unlist(lapply(match.call(), deparse)[-1])
     
-    
+    # backwards compatibility
     if (!is.element("cexil", names(funargs))) {
         names(funargs)[which(names(funargs) == "cexil")] <- "ilcs"
     }

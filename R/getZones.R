@@ -3,11 +3,11 @@ function(area, snames, ellipse = FALSE) {
     
     funargs <- unlist(lapply(match.call(), deparse)[-1])
     
+    # borders
     # s - sets; v - version; b - borders; x,y - coordinates
-    borders <- read.csv(file.path(system.file("data", package="venn"), "borders.csv.gz"))
     
+    # intersection borders
     # s - sets; v - version; i - intersection; b - border
-    ib <- read.csv(file.path(system.file("data", package="venn"), "ib.csv.gz"))
     
     if (is.character(area)) {
         x <- gsub("[[:space:]]", "", area)

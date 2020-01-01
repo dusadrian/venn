@@ -2,11 +2,11 @@
 function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
          allborders = TRUE, box = TRUE, gvenn = NULL, ...) {
     
+    # borders
     # s - sets; v - version; b - borders; x,y - coordinates
-    # borders <- read.csv(system.file("data", "borders.csv.gz", package = "venn"))
     
+    # sets
     # s - sets; v - version; n - set number; x,y - coordinates
-    sets <- read.csv(system.file("data", "sets.csv.gz", package = "venn"))
 
     zeroset <- matrix(c(0, 1000, 1000, 0, 0, 0, 0, 1000, 1000, 0), ncol = 2)
     colnames(zeroset) <- c("x", "y")

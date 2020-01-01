@@ -24,7 +24,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     if (!is.element("cexil", names(funargs))) {
         names(funargs)[which(names(funargs) == "cexil")] <- "ilcs"
     }
-    
+     
     if (!is.element("cexsn", names(funargs))) {
         names(funargs)[which(names(funargs) == "cexsn")] <- "sncs"
     }
@@ -139,8 +139,6 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         }
         
         individual <- length(opacity) == nrow(tt)
-        
-        ints <- read.csv(file.path(system.file("data", package = "venn"), "ints.csv.gz"))
         
         gvenn <- openPlot(size, par = par, ggplot = ggplot)
         
@@ -396,7 +394,6 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     )
     
     if (ilabels | counts & !is.null(cts)) {
-        icoords <- read.csv(file.path(system.file("data", package = "venn"), "icoords.csv.gz"))
         
         ilabels <- icoords$l[icoords$s == nofsets & icoords$v == as.numeric(ellipse)]
         if (counts) {

@@ -11,7 +11,7 @@ up to 7 sets.
 
 \usage{
 venn(x, snames = "", counts, ilabels = FALSE, ellipse = FALSE,
-     zcolor = "bw", opacity = 0.3, size = 15, ilcs = 0.6, sncs = 0.85,
+     zcolor = "bw", opacity = 0.3, plotsize = 15, ilcs = 0.6, sncs = 0.85,
      borders = TRUE, box = TRUE, par = TRUE, ggplot = FALSE, ...)
 }
 
@@ -26,7 +26,7 @@ venn(x, snames = "", counts, ilabels = FALSE, ellipse = FALSE,
         if "style"}
   \item{opacity}{Degree of opacity for the color(s) specified with
         \code{zcolor} (less opacity, more transparency).}
-  \item{size}{Plot size, in centimeters.}
+  \item{plotsize}{Plot size, in centimeters.}
   \item{ilcs}{Character expansion (in base plots) or size (in ggplots) 
         for the intersection labels}
   \item{sncs}{Character expansion (in base plots) or size (in ggplots)
@@ -247,7 +247,6 @@ venn(obj)
 # (less inclusion, more transparent)
 
 venn(obj, opacity = obj$tt$incl)
-
 
 # custom labels for intersections
 

@@ -9,6 +9,6 @@ import(admisc)
 importFrom("grDevices", "adjustcolor", "dev.cur", "dev.new")
 importFrom("graphics", "lines", "par", "plot", "polygon",
            "polypath", "text", "points")
-importFrom("utils", "packageDescription", "read.csv", "capture.output")
+importFrom("utils", "tail", "packageDescription", "read.csv", "capture.output")
 importFrom("grDevices", "colorRampPalette")
 importFrom("grDevices", "col2rgb", "rgb")

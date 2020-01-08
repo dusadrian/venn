@@ -1,6 +1,9 @@
 Version 1.9
     o Better handling of internal data, possibly solving rare bugs when installing
       in non-standard, custom directories
+    o Argument "size" from function venn() renamed to "plotsize", as the former is
+      a possible argument for the function geom_path() if ggplot
+    o Added flexibility in using additional aesthetic ggplot parameters
       
 Version 1.8
     o New arguments "box", "par" and "ggplot" to function venn()

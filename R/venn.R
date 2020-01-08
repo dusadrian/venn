@@ -1,6 +1,6 @@
 `venn` <-
 function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
-     zcolor = "bw", opacity = 0.3, size = 15, ilcs = 0.6, sncs = 0.85,
+     zcolor = "bw", opacity = 0.3, plotsize = 15, ilcs = 0.6, sncs = 0.85,
      borders = TRUE, box = TRUE, par = TRUE, ggplot = FALSE, ...) {
     
     if (missing(x)) {
@@ -78,13 +78,13 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         counts <- FALSE
     }
     
-    
-    if (inherits(x, "qca") | inherits(x, "tt")) {
+    if (any(is.element(c("qca", "QCA_min", "tt", "QCA_tt"), class(x)))) {
+    # if (inherits(x, "qca") | inherits(x, "tt")) {
         
         ttqca <- TRUE
         otype <- "input"
         
-        if (inherits(x, "tt")) {
+        if (any(is.element(c("tt", "QCA_tt"), class(x)))) {
             QCA <- all(which(is.element(c("minmat", "DCC", "options", "neg.out", "opts"), names(x))) < 4)
             otype <- "truth table"
             tt <- x$tt
@@ -93,7 +93,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         }
         else {
             QCA <- all(which(is.element(c("minmat", "DCC", "options", "neg.out", "opts"), names(x$tt))) < 4)
-            otype <- "qca"
+            otype <- "minimization"
             oq <- TRUE
             tt <- x$tt$tt
             snames <- unlist(strsplit(gsub("[[:space:]]", "", x$tt$options$conditions), split = ","))
@@ -140,7 +140,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         
         individual <- length(opacity) == nrow(tt)
         
-        gvenn <- openPlot(size, par = par, ggplot = ggplot)
+        gvenn <- openPlot(plotsize, par = par, ggplot = ggplot)
         
         if (individual) {
             
@@ -160,13 +160,23 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                         
                         polygons <- polygons[-nrow(polygons), ]
                         
-                        polypath(polygons, rule = "evenodd", col = color, border = NA)
+                        if (is.null(gvenn)) {
+                            polypath(polygons, rule = "evenodd", col = color, border = NA)
+                        }
+                        else {
+                            gvenn <- gvenn + ggpolypath::geom_polypath(polygons, rule = "evenodd", col = color)
+                        }
                         
                     }
                     else {
-                        
-                        polygon(ints[ints$s == nofsets & ints$v == as.numeric(ellipse) & ints$i == i, c("x", "y")], col = color)
-                        
+                        plotdata <- ints[ints$s == nofsets & ints$v == as.numeric(ellipse) & ints$i == i, c("x", "y")]
+
+                        if (is.null(gvenn)) {
+                            polygon(plotdata, col = color)
+                        }
+                        else {
+                            gvenn <- gvenn + ggplot2::geom_polygon(data = plotdata, ggplot2::aes(x, y), fill = color)
+                        }
                     }
                     
                 }
@@ -189,14 +199,26 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                         polygons <- rbind(zeroset, rep(NA, 2), getZones(0, nofsets, ellipse)[[1]])
                         
                         polygons <- polygons[-nrow(polygons), ]
-                        
-                        polypath(polygons, rule = "evenodd", col = ttcolors[i], border = NA)
+
+                        if (is.null(gvenn)) {
+                            polypath(polygons, rule = "evenodd", col = ttcolors[i], border = NA)
+                        }
+                        else {
+                            gvenn <- gvenn + ggpolypath::geom_polypath(polygons, rule = "evenodd", col = ttcolors[i])
+                        }
                         
                         zones <- zones[-1]
                     }
                     
-                    polygon(ints[ints$s == nofsets & ints$v == as.numeric(ellipse) & ints$i %in% zones, c("x", "y")], col = ttcolors[i])
-                    
+                    plotdata <- ints[ints$s == nofsets & ints$v == as.numeric(ellipse) & is.element(ints$i, zones), c("x", "y")]
+
+                    if (is.null(gvenn)) {
+                        polygon(plotdata, col = ttcolors[i])
+                    }
+                    else {
+                        gvenn <- gvenn + ggplot2::geom_polygon(data = plotdata, ggplot2::aes(x, y), fill = ttcolors[i])
+                    }
+
                 }
             }
         }
@@ -239,7 +261,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             x <- lapply(x, function(x) {
                 return(paste(apply(admisc::translate(x, snames = snames), 1, function(x) {
                     x[x < 0] <- "-"
-                    paste(x, collapse="")
+                    paste(x, collapse = "")
                 }), collapse = "+"))
             })
             
@@ -267,7 +289,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             }
         }
         
-        if (!all(apply(x, 1, function(l) all(l %in% 0:1)))) {
+        if (!all(is.element(unique(unlist(x)), c(0, 1)))) {
             cat("\n")
             stop(simpleError("As a dataframe, \"x\" can only contain values 0 and 1.\n\n"))
         }
@@ -380,7 +402,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     #        opacity = opacity, allborders = borders, ... = ...))
     
     if (!ttqca) {
-        gvenn <- openPlot(size, par = par, ggplot = ggplot)
+        gvenn <- openPlot(plotsize, par = par, ggplot = ggplot)
     }
     
     gvenn <- plotRules(x, zcolor, ellipse, opacity, allborders = borders, 
@@ -414,6 +436,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     }
         
     scoords <- scoords[scoords$s == nofsets & scoords$v == as.numeric(ellipse), c("x", "y")]
+    
     if (ggplot) {
         for (i in seq(length(snames))) {
             gvenn <- gvenn + ggplot2::annotate("text", label = snames[i], x = scoords$x[i], y = scoords$y[i], size = sncs)
@@ -435,8 +458,21 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         #        bty = "n", fill = ttcolors, text.width = 60, cex = 0.9, x.intersp = 0.6)
         
         # TRY 3: perfect
-        points(seq(10, 340, length.out = 4), rep(-25, 4), pch = 22, bg = ttcolors, cex = 1.75)
-        text(seq(40, 370, length.out = 4), rep(-26, 4), names(ttcolors), cex = 0.85)
+        if (is.null(gvenn)) {
+            points(seq(10, 340, length.out = 4), rep(-25, 4), pch = 22, bg = ttcolors, cex = 1.75)
+            text(seq(40, 370, length.out = 4), rep(-26, 4), names(ttcolors), cex = 0.85)
+        }
+        else {
+            gvenn <- gvenn +
+            ggplot2::annotate("rect", xmin = 10, xmax = 32, ymin = -44, ymax = -22, fill = ttcolors[1], col = "black") + 
+            ggplot2::annotate("rect", xmin = 120, xmax = 142, ymin = -44, ymax = -22, fill = ttcolors[2], col = "black") + 
+            ggplot2::annotate("rect", xmin = 230, xmax = 252, ymin = -44, ymax = -22, fill = ttcolors[3], col = "black") + 
+            ggplot2::annotate("rect", xmin = 340, xmax = 362, ymin = -44, ymax = -22, fill = ttcolors[4], col = "black") +
+            ggplot2::annotate("text", x = 50, y = -34, label = names(ttcolors)[1]) +
+            ggplot2::annotate("text", x = 160, y = -34, label = names(ttcolors)[2]) +
+            ggplot2::annotate("text", x = 270, y = -34, label = names(ttcolors)[3]) +
+            ggplot2::annotate("text", x = 380, y = -34, label = names(ttcolors)[4])
+        }
     }
 
     if (ggplot) {

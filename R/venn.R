@@ -16,7 +16,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             stop("Packages \"ggplot2\" and \"ggpolypath\" are needed to make this work, please install.", call. = FALSE)
         }
     }
-    
+
     # to see what's in the "..." argument
     funargs <- unlist(lapply(match.call(), deparse)[-1])
     

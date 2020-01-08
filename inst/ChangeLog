@@ -1,6 +1,6 @@
 Version 1.9
-    o Introduced lazy data, possibly solving rare bugs when installing in
-      non-standard, custom directories
+    o Better handling of internal data, possibly solving rare bugs when installing
+      in non-standard, custom directories
       
 Version 1.8
     o New arguments "box", "par" and "ggplot" to function venn()

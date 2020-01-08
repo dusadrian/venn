@@ -5,7 +5,7 @@ function(area, snames, ellipse = FALSE) {
     
     # borders
     # s - sets; v - version; b - borders; x,y - coordinates
-    
+
     # intersection borders
     # s - sets; v - version; i - intersection; b - border
     

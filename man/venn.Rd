@@ -10,7 +10,7 @@ up to 7 sets.
 }
 
 \usage{
-venn(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
+venn(x, snames = "", counts, ilabels = FALSE, ellipse = FALSE,
      zcolor = "bw", opacity = 0.3, size = 15, ilcs = 0.6, sncs = 0.85,
      borders = TRUE, box = TRUE, par = TRUE, ggplot = FALSE, ...)
 }
@@ -227,15 +227,14 @@ venn(x)
 
 
 # using sum of products notation
-venn("A + Bc", snames = "A, B, C, D")
+venn("A + B~C", snames = "A, B, C, D")
 
 # the union of two sets, example from above
 venn("A + E", snames = "A, B, C, D, E", zcol = "red, blue")
 
 
-
+\dontrun{
 # produce Venn diagrams for QCA objects
-
 library(QCA)
 
 data(CVF)
@@ -258,6 +257,7 @@ cases <- paste(c("HungariansRom", "CatholicsNIreland", "AlbaniansFYROM",
                  "RussiansEstonia"), collapse = "\n")
 coords <- unlist(getCentroid(getZones(pCVF$solution[[1]][2])))
 text(coords[1], coords[2], labels = cases, cex = 0.85)
+}
 
 }
 

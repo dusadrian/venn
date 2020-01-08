@@ -4,10 +4,10 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
     
     # borders
     # s - sets; v - version; b - borders; x,y - coordinates
-    
+
     # sets
     # s - sets; v - version; n - set number; x,y - coordinates
-
+    
     zeroset <- matrix(c(0, 1000, 1000, 0, 0, 0, 0, 1000, 1000, 0), ncol = 2)
     colnames(zeroset) <- c("x", "y")
     

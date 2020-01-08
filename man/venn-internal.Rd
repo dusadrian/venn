@@ -7,12 +7,6 @@
 \alias{plotRules}
 
 
-\alias{borders}
-\alias{ib}
-\alias{ints}
-\alias{sets}
-\alias{icoords}
-
 \title{Internal Functions}
 
 \description{

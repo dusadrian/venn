@@ -254,7 +254,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             
             if (identical(snames, "")) {
                 y <- admisc::translate(paste(x, collapse = "+"), snames = snames)
-                snames <- colnames(x)
+                snames <- colnames(y)
                 nofsets <- length(snames)
             }
             

@@ -1,6 +1,6 @@
 Package: venn
-Version: 1.8-2
-Date: 2020-01-01
+Version: 1.9
+Date: 2020-01-11
 Title: Draw Venn Diagrams
 Authors@R: person("Adrian", "Dusa", role = c("aut", "cre", "cph"),
                   email = "dusa.adrian@unibuc.ro")

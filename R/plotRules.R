@@ -176,15 +176,15 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
     
     
     if (allsets & allwhole) {
-        
+        temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]
         if (is.numeric(rules) & !identical(zcolor, "bw")) {
             # the zones have not been plotted yet
             if (is.null(gvenn)) {
-                polygon(sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")],
+                polygon(temp,
                         col = adjustcolor(zcolor, alpha.f = opacity), border = NA)
             }
             else {
-                gvenn <- gvenn + ggplot2::geom_polygon(data = sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")],
+                gvenn <- gvenn + ggplot2::geom_polygon(data = temp,
                     ggplot2::aes(x, y), fill = adjustcolor(zcolor, alpha.f = opacity))
             }
             
@@ -198,13 +198,11 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
             # the default set of colors ignores all other additional parameters for the borders
             
             for (i in seq(nofsets)) {
+                temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == i, c("x", "y")]
                 if (is.null(gvenn)) {
-                    suppressWarnings(
-                        lines(sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == i, c("x", "y")], col = bcolor[i])
-                    )
+                    suppressWarnings( lines(temp, col = bcolor[i]))
                 }
                 else {
-                    temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == i, c("x", "y")]
                     breaks <- which(apply(temp, 1, function(x) any(is.na(x))))
                     start <- 1
                     for (b in seq(length(breaks))) {
@@ -240,7 +238,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
                         eval(as.call(suppress))
                     }
                     else {
-                        seplines <- list(as.name("geom_path"))
+                        seplines <- list(ggplot2::geom_path)
                         if (all(is.na(tail(plotdata, 1)))) {
                             # to remove the annoying warning "removed 1 row containing missing data"
                             plotdata <- plotdata[-nrow(plotdata), , drop = FALSE]
@@ -258,11 +256,11 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
             }
             else {
                 # print borders in black
+                temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]
                 if (is.null(gvenn)) {
-                    suppressWarnings(lines(sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]))
+                    suppressWarnings(lines(temp))
                 }
                 else {
-                    temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]
                     breaks <- which(apply(temp, 1, function(x) any(is.na(x))))
                     start <- 1
                     for (b in seq(length(breaks))) {
@@ -278,11 +276,11 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         # first print all borders in black
         # (important to begin with this, the zones might not cover all intersections)
         if (allborders) {
+            temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]
             if (is.null(gvenn)) {
-                suppressWarnings(lines(sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]))
+                suppressWarnings(lines(temp))
             }
             else {
-                temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]
                 breaks <- which(apply(temp, 1, function(x) any(is.na(x))))
                 start <- 1
                 for (b in seq(length(breaks))) {
@@ -356,7 +354,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
                                 
                                 if (b > 1) start <- breaks[b - 1] + 1
 
-                                seplines <- list(as.name("geom_path"))
+                                seplines <- list(ggplot2::geom_path)
                                 seplines[["data"]] <- temp[seq(start, breaks[b] - 1), ]
                                 seplines[["mapping"]] <- ggplot2::aes(x, y)
                                 

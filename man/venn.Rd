@@ -33,7 +33,7 @@ venn(x, snames = "", counts, ilabels = FALSE, ellipse = FALSE,
         for the set names}
   \item{borders}{Logical: draw all intersection borders}
   \item{box}{Logical: draw the outside square}
-  \item{par}{Logical: use the default, custom plot parameters}
+  \item{par}{Logical: use the default, custom par settings}
   \item{ggplot}{Logical: plot the Venn diagram using ggplot}
   \item{...}{Additional parameters, mainly for the outer borders of the sets}
 }
@@ -118,8 +118,11 @@ set to 0.6 for all Venn diagrams with up to five sets, and it automatically decr
 for six sets and 0.45 for seven sets.
 
 Via \bold{\code{...}}, users can specify additional parameters, mainly for the outer borders
-of the sets, as specified by \bold{\code{par}}. All of them are feeded to the function
-\bold{\code{lines()}} which is responsible with the borders.
+of the sets, as specified by \bold{\code{\link[graphics]{par}()}}, and since version 1.9 it is
+also used to pass additional aesthetics parameters for the ggplot2 graphics. All of them are
+feeded either to the base function \bold{\code{\link[graphics]{lines}()}} which is responsible
+with the borders, or to the function \bold{\code{\link[ggplot2]{geom_path}()}} from package
+\pkg{ggplot2}.
 
 For up to 3 sets, the shapes can be circular. For more than 3 sets, the shape cannot be
 circular: for 4 and 5 sets they can be ellipses, while for more than 5 sets the
@@ -137,8 +140,9 @@ it has no effect when \bold{\code{x}} is a list, or a data frame, or a truth tab
 The argument \bold{\code{par}} is used to define a custom set of parameters when producing
 the plot, to ensure a square shape of about 15 cm and eliminate the outer regions. If
 deactivated, users can define their own size and shape of the plot using the system function
-\bold{\code{par()}}. Either way, the plot is always produced using a size of 1000 points for
-both horizontal and vertical.
+\bold{\code{\link[graphics]{par}()}}. By default, the plot is always produced using a size of
+1000 points for both horizontal and vertical, unless the argument \bold{\code{ggplot}} is
+activated, when the argument \bold{\code{par}} will have no effect.
 }
 
 
@@ -165,8 +169,14 @@ venn(3, counts = 1:8)
 # display the first whole set
 venn("1--")
 
-# an equivalent command, from all intersections
-venn("100, 110, 101, 111")
+# same with
+venn("A", snames = "A, B, C")
+
+# an equivalent command, from the union of all intersections
+venn("100 + 110 + 101 + 111")
+
+# same with
+venn("A~B~C + AB~C + A~BC + ABC")
 
 # adding the labels for the intersections
 venn("1--", ilabels = TRUE)
@@ -192,8 +202,14 @@ venn(5, ilabels = TRUE, zcolor = "style")
 # a union of two sets
 venn("1---- + ----1")
 
+# same with
+venn("A + E", snames = "A, B, C, D, E")
+
 # with different colors
 venn("1---- , ----1", zcolor = "red, blue")
+
+# same with
+venn("A, E", snames = "A, B, C, D, E", zcolor = "red, blue")
 
 # same colors for the borders
 venn("1---- , ----1", zcolor = "red, blue", col = "red, blue")
@@ -215,10 +231,15 @@ venn(c("1000000", "0100000", "0010000", "0001000",
      borders = FALSE)
 
 
+# using sum of products notation
+venn("A + B~C", snames = "A, B, C, D")
+
+
 # when x is a list
 set.seed(12345)
 x <- list(First = 1:20, Second = 10:30, Third = sample(25:50, 15))
 venn(x)
+
 
 # when x is a dataframe
 set.seed(12345)
@@ -226,11 +247,14 @@ x <- as.data.frame(matrix(sample(0:1, 150, replace = TRUE), ncol = 5))
 venn(x)
 
 
-# using sum of products notation
-venn("A + B~C", snames = "A, B, C, D")
+# producing a ggplot2 graphics
+venn(x, ggplot = TRUE)
 
-# the union of two sets, example from above
-venn("A + E", snames = "A, B, C, D, E", zcol = "red, blue")
+# increasing the border size
+venn(x, ggplot = TRUE, size = 1.5)
+
+# with dashed lines
+venn(x, ggplot = TRUE, linetype = "dashed")
 
 
 \dontrun{
@@ -241,7 +265,6 @@ data(CVF)
 obj <- truthTable(CVF, "PROTEST", incl.cut = 0.85)
 
 venn(obj)
-
 
 # to set opacity based on inclusion scores
 # (less inclusion, more transparent)

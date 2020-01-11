@@ -1,12 +1,5 @@
 `openPlot` <-
 function(plotsize = 15, par = TRUE, ggplot = FALSE) {
-    if (par) {
-        if (dev.cur() == 1) {
-            dev.new(width = (plotsize + 1)/2.54, height = (plotsize + 1)/2.54)
-        }
-        
-        par(new = FALSE, xpd = TRUE, mai = c(0.05, 0.05, 0.05, 0.05))
-    }
 
     if (ggplot) {
         cf <- ggplot2::coord_fixed()
@@ -34,6 +27,13 @@ function(plotsize = 15, par = TRUE, ggplot = FALSE) {
                 plot.caption = ggplot2::element_text(size = 0)))
     }
     else {
+        if (par) {
+            if (dev.cur() == 1) {
+                dev.new(width = (plotsize + 1)/2.54, height = (plotsize + 1)/2.54)
+            }
+            
+            par(new = FALSE, xpd = TRUE, mai = c(0.05, 0.05, 0.05, 0.05))
+        }
         plot(0:1000, type = "n", axes = FALSE, asp = 1, xlab = "", ylab = "")
     }
 }

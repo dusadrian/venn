@@ -2,8 +2,10 @@ Package: venn
 Version: 1.9
 Date: 2020-01-11
 Title: Draw Venn Diagrams
-Authors@R: person("Adrian", "Dusa", role = c("aut", "cre", "cph"),
-                  email = "dusa.adrian@unibuc.ro")
+Authors@R: person(given = "Adrian", family = "Dusa",
+                  role = c("aut", "cre", "cph"),
+                  email = "dusa.adrian@unibuc.ro",
+                  comment = c(ORCID = "0000-0002-3525-9253"))
 Depends: R (>= 3.0.0)
 Imports: admisc (>= 0.5)
 Suggests: QCA (>= 3.6), ggplot2, ggpolypath

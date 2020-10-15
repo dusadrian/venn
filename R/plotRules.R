@@ -180,18 +180,19 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         if (is.numeric(rules) & !identical(zcolor, "bw")) {
             # the zones have not been plotted yet
             if (is.null(gvenn)) {
-                polygon(temp,
-                        col = adjustcolor(zcolor, alpha.f = opacity), border = NA)
+                polygon(temp, col = adjustcolor(zcolor, alpha.f = opacity), border = NA)
             }
             else {
-                gvenn <- gvenn + ggplot2::geom_polygon(data = temp,
-                    ggplot2::aes(x, y), fill = adjustcolor(zcolor, alpha.f = opacity))
-            }
-            
+                breaks <- which(apply(temp, 1, function(x) any(is.na(x))))
+                start <- 1
+                for (b in seq(length(breaks))) {
+                    if (b > 1) start <- breaks[b - 1] + 1
+                    gvenn <- gvenn + ggplot2::geom_polygon(data = temp[seq(start, breaks[b] - 1), ], ggplot2::aes(x, y), fill = adjustcolor(zcolor[b], alpha.f = opacity))
+                }
+            }    
         }
         
         # now the borders
-        
 
         if (default) {
             

@@ -19,7 +19,7 @@ A simple Venn diagram with 3 sets
 venn(3)
 ```
 
-<img src="man/figures/fig01.png" />
+<img src="man/figures/fig01.svg" />
 
 
 With a vector of counts: 1 for "000", 2 for "001" etc.
@@ -269,3 +269,5 @@ cases <- paste(c("HungariansRom", "CatholicsNIreland", "AlbaniansFYROM",
 coords <- unlist(getCentroid(getZones(pCVF$solution[[1]][2])))
 text(coords[1], coords[2], labels = cases, cex = 0.85)
 ```
+
+<img src="man/figures/fig25.png" />

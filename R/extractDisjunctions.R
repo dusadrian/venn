@@ -22,8 +22,8 @@
     snames <- colnames(y)
     
     if (grepl("\\(|\\)", x)) {
-        opened <- gsub("[A-Za-z]|\\+|\\*|\\)", "", x)
-        closed <- gsub("[A-Za-z]|\\+|\\*|\\(", "", x)
+        opened <- gsub("[A-Za-z]|\\+|\\*|\\(", "", x)
+        closed <- gsub("[A-Za-z]|\\+|\\*|\\)", "", x)
         if (nchar(opened) != nchar(closed)) {
             cat("\n")
             stop(simpleError("All opened / closed brackets should match.\n\n"))
@@ -90,4 +90,3 @@
     }
     
 }
-

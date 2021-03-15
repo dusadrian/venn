@@ -1,3 +1,8 @@
+Version 1.10
+    o Solved bug related to fill colors with ggplot graphics
+      (thanks to Dan Chaltiel for the report)
+    o Package venn now depends on R >= 3.5.0
+      
 Version 1.9
     o Better handling of internal data, possibly solving rare bugs when installing
       in non-standard, custom directories
@@ -27,7 +32,7 @@ Version 1.6
       intersections will be plotted.
 
 Version 1.5
-    o Adaptation to package QCA version 3.0
+    o Adapted to package QCA version 3.0
     o Replaced the argument "nofsets" with "snames", in function getZones()
     o Argument "transparency" renamed to "opacity"
     o Arguments "zcolor" and "col" in function venn() now accept a single character
@@ -62,4 +67,3 @@ Version 1.1
     
 Version 1.0
     o First version of the package
-

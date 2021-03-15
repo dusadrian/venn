@@ -408,25 +408,19 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     gvenn <- plotRules(x, zcolor, ellipse, opacity, allborders = borders, 
                         box = box, gvenn = gvenn, ... = ...)
     
-    scoords <- data.frame(
-        s = c(1, rep(2, 2), rep(3, 3), rep(4, 4), rep(5, 10), rep(6, 6), rep(7, 7), rep(4, 4)),
-        v = c(rep(0, 1 + 2 + 3), rep(1, 4), rep(0:1, each = 5), rep(0, 6 + 7), rep(0, 4)), 
-        x = c(500, 250, 750, 100, 500, 900,  88, 263, 713, 888,     80, 535, 900, 700, 120,      88, 533, 850, 750, 163,       100, 500, 910, 925, 550, 100, 220, 685, 935, 935, 600, 155,  50,  85, 220, 780, 915),
-        y = c(780, 780, 780, 560, 910, 560, 663, 850, 850, 663,    800, 960, 700,  50, 120,     750, 963, 688,  40,  88,       860, 975, 775, 165,  30, 140, 955, 980, 780, 200,  15, 120, 690, 670, 850, 850, 670)
-    )
-    
     if (ilabels | counts & !is.null(cts)) {
         
         ilabels <- icoords$l[icoords$s == nofsets & icoords$v == as.numeric(ellipse)]
+        
         if (counts) {
             cts[cts == 0] <- ""
             ilabels <- cts
         }
 
         icoords <- icoords[icoords$s == nofsets & icoords$v == as.numeric(ellipse), c("x", "y")]
-
+        
         if (ggplot) {
-            for (i in seq(length(ilabels))) {
+            for (i in which(ilabels != "")) {
                 gvenn <- gvenn + ggplot2::annotate("text", label = ilabels[i], x = icoords$x[i], y = icoords$y[i], size = ilcs)
             }
         }

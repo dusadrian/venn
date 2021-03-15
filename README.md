@@ -11,7 +11,6 @@ Install the stable version from CRAN:
 install.packages("venn")
 ```
 
-
 Examples
 --------
 
@@ -20,106 +19,169 @@ A simple Venn diagram with 3 sets
 venn(3)
 ```
 
+<img src="man/figures/fig01.png" />
+
+
 With a vector of counts: 1 for "000", 2 for "001" etc.
 ``` r
 venn(3, counts = 1:8)
 ```
+
+<img src="man/figures/fig02.png" />
+
 
 Display the first whole set
 ``` r
 venn("1--")
 ```
 
+<img src="man/figures/fig03.png" />
+
+
 Same with
 ``` r
 venn("A", snames = "A, B, C")
 ```
+
+<img src="man/figures/fig03.png" />
+
 
 An equivalent command, from the union of all intersections
 ``` r
 venn("100 + 110 + 101 + 111")
 ```
 
+<img src="man/figures/fig03.png" />
+
+
 Same with
 ``` r
 venn("A~B~C + AB~C + A~BC + ABC")
 ```
+
+<img src="man/figures/fig03.png" />
+
 
 Adding the labels for the intersections
 ``` r
 venn("1--", ilabels = TRUE)
 ```
 
+<img src="man/figures/fig04.png" />
+
+
 Using different parameters for the borders
 ``` r
 venn(4, lty = 5, col = "navyblue")
 ```
+
+<img src="man/figures/fig05.png" />
+
 
 Using ellipses
 ``` r
 venn(4, lty = 5, col = "navyblue", ellipse = TRUE)
 ```
 
+<img src="man/figures/fig06.png" />
+
+
 A 5 sets Venn diagram
 ``` r
 venn(5)
 ```
+
+<img src="man/figures/fig07.png" />
+
 
 A 5 sets Venn diagram using ellipses
 ``` r
 venn(5, ellipse = TRUE)
 ```
 
+<img src="man/figures/fig08.png" />
+
+
 A 5 sets Venn diagram with intersection labels
 ``` r
 venn(5, ilabels = TRUE)
 ```
+
+<img src="man/figures/fig09.png" />
+
 
 And a predefined color style
 ``` r
 venn(5, ilabels = TRUE, zcolor = "style")
 ```
 
+<img src="man/figures/fig10.png" />
+
+
 A union of two sets
 ``` r
 venn("1---- + ----1")
 ```
+
+<img src="man/figures/fig11.png" />
+
 
 Same with
 ``` r
 venn("A + E", snames = "A, B, C, D, E")
 ```
 
+<img src="man/figures/fig11.png" />
+
+
 With different colors
 ``` r
 venn("1---- , ----1", zcolor = "red, blue")
 ```
 
-Same with
+<img src="man/figures/fig12.png" />
+
+
+Same using SOP - sum of products notation
 ``` r
 venn("A, E", snames = "A, B, C, D, E", zcolor = "red, blue")
 ```
+
+<img src="man/figures/fig12.png" />
+
 
 Same colors for the borders
 ``` r
 venn("1---- , ----1", zcolor = "red, blue", col = "red, blue")
 ```
 
+<img src="man/figures/fig13.png" />
+
+
 A 6 sets diagram
 ``` r
 venn(6)
 ```
+
+<img src="man/figures/fig14.png" />
+
 
 Seven sets "Adelaide"
 ``` r
 venn(7)
 ```
 
+<img src="man/figures/fig15.png" />
+
+
 Artistic version
 ``` r
 venn(c("1000000", "0100000", "0010000", "0001000",
        "0000100", "0000010", "0000001", "1111111"))
 ```
+
+<img src="man/figures/fig16.png" />
+
 
 Without all borders
 ``` r
@@ -128,40 +190,61 @@ venn(c("1000000", "0100000", "0010000", "0001000",
      borders = FALSE)
 ```
 
-Using sum of products notation
+<img src="man/figures/fig17.png" />
+
+
+Using SOP - sum of products notation
 ``` r
 venn("A + B~C", snames = "A, B, C, D")
 ```
 
-When x is a list
+<img src="man/figures/fig18.png" />
+
+
+The input can be a list
 ``` r
 set.seed(12345)
 x <- list(First = 1:20, Second = 10:30, Third = sample(25:50, 15))
 venn(x)
 ```
 
+<img src="man/figures/fig19.png" />
 
-When x is a dataframe
+
+
+Or a dataframe
 ``` r
 set.seed(12345)
 x <- as.data.frame(matrix(sample(0:1, 150, replace = TRUE), ncol = 5))
 venn(x)
 ```
 
+<img src="man/figures/fig20.png" />
+
+
 Using ggplot2 graphics
 ``` r
 venn(x, ggplot = TRUE)
 ```
+
+<img src="man/figures/fig21.png" />
+
 
 Increasing the border size
 ``` r
 venn(x, ggplot = TRUE, size = 1.5)
 ```
 
+<img src="man/figures/fig22.png" />
+
+
 With dashed lines
 ``` r
 venn(x, ggplot = TRUE, linetype = "dashed")
 ```
+
+<img src="man/figures/fig23.png" />
+
 
 Venn diagrams for QCA objects
 ``` r
@@ -173,11 +256,9 @@ obj <- truthTable(CVF, "PROTEST", incl.cut = 0.85)
 venn(obj)
 ```
 
-To set opacity based on inclusion scores
-(less inclusion, more transparent)
-``` r
-venn(obj, opacity = obj$tt$incl)
-```
+<img src="man/figures/fig24.png" />
+
+
 
 Custom labels for intersections
 ``` r

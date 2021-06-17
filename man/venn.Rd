@@ -65,7 +65,7 @@ A meta-language can be used to define these intersections, using the values of
 The command \bold{\code{"1--"}} is translated as "display only the first, entire set" is
 equivalent with the union of the four intersections \bold{\code{"100 + 101 + 110 + 111"}}.
 
-The parameter \bold{\code{setnames}} should have the same length as the number of sets
+The parameter \bold{\code{snames}} should have the same length as the number of sets
 specified by the parameter \bold{\code{x}}.
 
 When the parameter \bold{\code{x}} is used as a metacommand, the number of sets is calculated

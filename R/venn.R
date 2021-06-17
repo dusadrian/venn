@@ -9,8 +9,8 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     }
 
     if (ggplot) {
-        ilcs <- 2.5
-        sncs <- 3.5
+        ilcs <- ilcs * 2.5 / 0.6
+        sncs <- sncs * 3.5 / 0.85
         if (!requireNamespace("ggplot2", quietly = TRUE) | !requireNamespace("ggpolypath", quietly = TRUE)) {
             cat("\n")
             stop("Packages \"ggplot2\" and \"ggpolypath\" are needed to make this work, please install.", call. = FALSE)
@@ -297,15 +297,20 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         if (nofsets == 0) {
             nofsets <- length(x)
         }
-        
-        cts <- apply(sapply(rev(seq(nofsets)), function(x) {
-            rep.int(c(sapply(0:1, function(y) rep.int(y, 2^(x - 1)))), 2^nofsets/2^x)}), 1,
-            function(l1) {
-                sum(apply(x, 1, function(l2) {
-                    all(l1 == l2)
-                }))
-            }
-        )
+
+        # if (is.numeric(counts) && length(counts) == nrow(x) && length(counts) <= 2^ncol(x)) {
+        #     cts <- counts
+        # }
+        # else {
+            cts <- apply(sapply(rev(seq(nofsets)), function(x) {
+                rep.int(c(sapply(0:1, function(y) rep.int(y, 2^(x - 1)))), 2^nofsets/2^x)}), 1,
+                function(l1) {
+                    sum(apply(x, 1, function(l2) {
+                        all(l1 == l2)
+                    }))
+                }
+            )
+        # }
         
         counts <- TRUE
         x <- nofsets

@@ -1,18 +1,18 @@
 `plotRules` <-
 function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
          allborders = TRUE, box = TRUE, gvenn = NULL, ...) {
-    
+
     # borders
     # s - sets; v - version; b - borders; x,y - coordinates
 
     # sets
     # s - sets; v - version; n - set number; x,y - coordinates
-    
+
     zeroset <- matrix(c(0, 1000, 1000, 0, 0, 0, 0, 1000, 1000, 0), ncol = 2)
     colnames(zeroset) <- c("x", "y")
-    
+
     default <- identical(zcolor, "style")
-    
+
     # assume the zones cover all sets (if rules is a number that is TRUE by default, anyways)
     allsets <- TRUE
 
@@ -23,7 +23,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
 
 
     if (is.list(rules)) {
-        
+
         if (identical(zcolor, "bw")) {
             zcolor <- rep("#96bc72", length.out = length(rules))
         }
@@ -33,68 +33,66 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         else {
             zcolor <- rep(zcolor, length.out = length(rules))
         }
-        
-        
+
+
         nofsets <- unique(unlist(lapply(rules, function(x) {
             nchar(unlist(strsplit(x, split = "\\+")))
-        })))    
-        
+        })))
+
         tt <- sapply(rev(seq(nofsets)), function(x) {
             rep(c(sapply(0:1, function(y) rep(y, 2^(x - 1)))), 2^nofsets/2^x)
         })
-        
+
         rownames(tt) <- seq(nrow(tt)) - 1
-        
+
         rowns <- lapply(rules, function(x) {
             sort(unique(unlist(lapply(strsplit(x, split = "\\+"), function(x) {
                 unlist(lapply(strsplit(x, split = ""), function(x) {
-                
+
                     ttc <- tt
                     for (j in seq(length(x))) {
                         if (x[j] != "-") {
                             ttc <- subset(ttc, ttc[, j] == x[j])
                         }
                     }
-                    
+
                     return(as.numeric(rownames(ttc)))
                 }))
-                
+
             }))))
         })
-        
-        
+
+
         # check if any of the remaining rowns define a whole set
-            
+
         # wholesets will be a numeric vector:
         # 0 if it's not a whole set
         # the number of the set (if it is whole), from the order in the truth table
-        
+
         wholesets <- unlist(lapply(rules, function(x) {
             ifelse(nchar(gsub("-", "", x)) == 1, as.vector(regexpr("[0-9]", x)), 0)
         }))
-        
-        
+
         allwhole <- all(wholesets > 0)
-        
+
         # verify if the rules cover all sets
         allsets <- length(rules) == nofsets & allwhole
-        
-        
+
+
         if (nofsets < 4 | nofsets > 5) {
             ellipse <- FALSE
         }
-        
+
         zones <- vector("list", length(wholesets))
-        
+
         irregular <- unlist(lapply(rowns, function(x) any(x == 0)))
-        
+
         if (any(irregular)) { # inverse, the area outside a shape (or outside all shapes)
-            
             for (i in which(irregular)) {
                 zones[[i]] <- getZones(rowns[[i]], nofsets, ellipse)
                 polygons <- rbind(zeroset, rep(NA, 2), zones[[i]][[1]])
                 polygons <- polygons[-nrow(polygons), ] # needed...?
-                
+
                 if (is.null(gvenn)) {
                     polypath(polygons, rule = "evenodd", col = adjustcolor(zcolor[i], alpha.f = opacity), border = NA)
                 } else {
@@ -102,24 +100,23 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
                 }
             }
         }
-        
-        
+
+
         if (any(!irregular)) { # normal shapes
-            
             if (any(wholesets > 0)) {
                 for (i in which(wholesets > 0)) {
                     # [[1]] simulates getZones() because sometimes there might be multipe zones
                     zones[[i]][[1]] <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == wholesets[i], c("x", "y")]
                 }
             }
-            
+
             if (any(wholesets == 0)) {
                 for (i in which(wholesets == 0 & !irregular)) {
                     zones[[i]] <- getZones(rowns[[i]], nofsets, ellipse)
                 }
             }
-            
-            
+
+
             for (i in seq(length(zones))) {
                 if (!irregular[i]) {
                     for (j in seq(length(zones[[i]]))) {
@@ -137,14 +134,14 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         nofsets <- rules
         allsets <- TRUE
         allwhole <- TRUE
-        
+
         if (identical(zcolor, "style")) {
             zcolor <- colorRampPalette(c("red", "yellow", "green", "blue"))(nofsets)
         }
         else if (!identical(zcolor, "bw")) {
             zcolor <- rep(zcolor, length.out = nofsets)
         }
-        
+
         if (nofsets < 4 | nofsets > 5) {
             ellipse <- FALSE
         }
@@ -153,10 +150,10 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         cat("\n")
         stop(simpleError("Something went wrong\n\n"))
     }
-    
-    
+
+
     other.args <- list(...)
-    
+
     if (box) {
         if (is.null(gvenn)) {
             lines(zeroset)
@@ -165,7 +162,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
             gvenn <- gvenn + ggplot2::geom_path(data = as.data.frame(zeroset), ggplot2::aes(x, y))
         }
     }
-    
+
     if (!identical(zcolor, "bw")) {
         # border colors, a bit darker
         bcolor <- rgb(t(col2rgb(zcolor)/1.4), maxColorValue = 255)
@@ -173,8 +170,8 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
     else {
         bcolor <- "#000000"
     }
-    
-    
+
+
     if (allsets & allwhole) {
         temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse), c("x", "y")]
         if (is.numeric(rules) & !identical(zcolor, "bw")) {
@@ -189,15 +186,15 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
                     if (b > 1) start <- breaks[b - 1] + 1
                     gvenn <- gvenn + ggplot2::geom_polygon(data = temp[seq(start, breaks[b] - 1), ], ggplot2::aes(x, y), fill = adjustcolor(zcolor[b], alpha.f = opacity))
                 }
-            }    
+            }
         }
-        
+
         # now the borders
 
         if (default) {
-            
+
             # the default set of colors ignores all other additional parameters for the borders
-            
+
             for (i in seq(nofsets)) {
                 temp <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == i, c("x", "y")]
                 if (is.null(gvenn)) {
@@ -214,28 +211,28 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
             }
         }
         else {
-            
+
             if (length(other.args) > 0) {
-                
+
                 # there might be different border colors for each zone (set in this case) 
                 # arguments are recycled to the length of the zones
                 other.args <- lapply(other.args, function(x) {
                     rep(x, length.out = nofsets)
                 })
-                
+
                 for (i in seq(nofsets)) {
                     plotdata <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == i, c("x", "y")]
-                    
+
                     if (is.null(gvenn)) {
                         seplines <- list(as.name("lines"), x = plotdata)
                         suppress <- list(as.name("suppressWarnings"))
-                        
+
                         for (j in names(other.args)) {
                             seplines[[j]] <- other.args[[j]][i]
                         }
-                        
+
                         suppress[[2]] <- as.call(seplines)
-                        
+
                         eval(as.call(suppress))
                     }
                     else {
@@ -252,7 +249,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
 
                         gvenn <- gvenn + eval(as.call(seplines))
                     }
-                
+
                 }
             }
             else {
@@ -273,7 +270,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         }
     }
     else {
-        
+
         # first print all borders in black
         # (important to begin with this, the zones might not cover all intersections)
         if (allborders) {
@@ -295,12 +292,12 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
                 other.args$col <- "black"
             }
         }
-        
+
         # surely this is not numeric, there are zones already calculated
-        
-        
+
+
         if (default) {
-            
+
             for (i in seq(length(zones))) {
                 for (j in seq(length(zones[[i]]))) {
                     if (is.null(gvenn)) {
@@ -317,34 +314,34 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
                     }
                 }
             }
-            
+
         }
         else {
-            
+
             if (length(other.args) > 0) {
-                
+
                 # arguments are recycled to the length of the zones
                 other.args <- lapply(other.args, function(x) {
                     rep(x, length.out = length(rules))
                 })
-                
+
                 for (i in seq(length(zones))) {
-                    
+
                     for (j in seq(length(zones[[i]]))) {
                         if (is.null(gvenn)) {
                             seplines <- list(as.name("lines"), x = zones[[i]][[j]])
                             suppress <- list(as.name("suppressWarnings"))
-                            
+
                             if (any(names(other.args) == "col")) {
                                 other.args$col <- admisc::splitstr(other.args$col)
                             }
-                            
+
                             for (j in names(other.args)) {
                                 seplines[[j]] <- other.args[[j]][i]
                             }
-                            
+
                             suppress[[2]] <- as.call(seplines)
-                            
+
                             eval(as.call(suppress))
                         }
                         else {
@@ -352,17 +349,17 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
                             breaks <- which(apply(temp, 1, function(x) any(is.na(x))))
                             start <- 1
                             for (b in seq(length(breaks))) {
-                                
+
                                 if (b > 1) start <- breaks[b - 1] + 1
 
                                 seplines <- list(ggplot2::geom_path)
                                 seplines[["data"]] <- temp[seq(start, breaks[b] - 1), ]
                                 seplines[["mapping"]] <- ggplot2::aes(x, y)
-                                
+
                                 if (any(names(other.args) == "col")) {
                                     other.args$col <- admisc::splitstr(other.args$col)
                                 }
-                                
+
                                 for (j in names(other.args)) {
                                     seplines[[j]] <- other.args[[j]][i]
                                 }

@@ -124,10 +124,11 @@ function(area, snames, ellipse = FALSE) {
     
     result <- lapply(result, function(x) {
         
-        b <- ib$b[ib$s == nofsets & ib$v == as.numeric(ellipse) & ib$i %in% x]
+        b <- ib$b[ib$s == nofsets & ib$v == as.numeric(ellipse) & is.element(ib$i, x)]
         
         if (any(duplicated(b))) {
             b <- setdiff(b, b[duplicated(b)])
+            # b <- unique(b)
         }
         
         # print(ib[ib$s == nofsets & ib$v == as.numeric(ellipse) & ib$b %in% b, ])
@@ -181,5 +182,3 @@ function(area, snames, ellipse = FALSE) {
     
     return(result)
 }
-
-    

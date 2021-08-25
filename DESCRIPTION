@@ -1,5 +1,5 @@
 Package: venn
-Version: 1.10
+Version: 1.10-5
 Date: 2021-03-15
 Title: Draw Venn Diagrams
 Authors@R: person(given = "Adrian", family = "Dusa",

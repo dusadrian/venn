@@ -77,22 +77,19 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     cts <- NULL
 
 
-    # if (isTRUE(counts)) {
-
-    # }
-
-
-    if (is.numeric(counts) & is.numeric(x)) {
-        if (length(counts) == 2^x) {
-            cts <- counts
-            counts <- TRUE
+    if (is.numeric(counts)) {
+        if (is.numeric(x)) {
+            if (length(counts) == 2^x) {
+                cts <- counts
+                counts <- TRUE
+            }
+            else {
+                counts <- FALSE
+            }
         }
         else {
             counts <- FALSE
         }
-    }
-    else {
-        counts <- FALSE
     }
 
     if (any(is.element(c("qca", "QCA_min", "tt", "QCA_tt"), class(x)))) {
@@ -222,14 +219,18 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                         }
                         else {
                             gvenn <- gvenn + ggpolypath::geom_polypath(
-                                polygons, rule = "evenodd", col = color
+                                polygons,
+                                rule = "evenodd",
+                                col = color
                             )
                         }
 
                     }
                     else {
                         plotdata <- ints[
-                            ints$s == nofsets & ints$v == as.numeric(ellipse) & ints$i == i,
+                            ints$s == nofsets &
+                            ints$v == as.numeric(ellipse) &
+                            ints$i == i,
                             c("x", "y")
                         ]
 
@@ -244,7 +245,6 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                             )
                         }
                     }
-
                 }
             }
         }
@@ -258,33 +258,56 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
 
                     if (any(zones == 1)) {
 
-                        zeroset <- matrix(c(0, 1000, 1000, 0, 0, 0, 0, 1000, 1000, 0), ncol = 2)
+                        zeroset <- matrix(
+                            c(0, 1000, 1000, 0, 0, 0, 0, 1000, 1000, 0),
+                            ncol = 2
+                        )
 
                         colnames(zeroset) <- c("x", "y")
 
-                        polygons <- rbind(zeroset, rep(NA, 2), getZones(0, nofsets, ellipse)[[1]])
+                        polygons <- rbind(
+                            zeroset,
+                            rep(NA, 2),
+                            getZones(0, nofsets, ellipse)[[1]]
+                        )
 
                         polygons <- polygons[-nrow(polygons), ]
 
                         if (is.null(gvenn)) {
-                            polypath(polygons, rule = "evenodd", col = ttcolors[i], border = NA)
+                            polypath(
+                                polygons,
+                                rule = "evenodd",
+                                col = ttcolors[i],
+                                border = NA
+                            )
                         }
                         else {
-                            gvenn <- gvenn + ggpolypath::geom_polypath(polygons, rule = "evenodd", col = ttcolors[i])
+                            gvenn <- gvenn + ggpolypath::geom_polypath(
+                                polygons,
+                                rule = "evenodd",
+                                col = ttcolors[i]
+                            )
                         }
 
                         zones <- zones[-1]
                     }
 
-                    plotdata <- ints[ints$s == nofsets & ints$v == as.numeric(ellipse) & is.element(ints$i, zones), c("x", "y")]
+                    plotdata <- ints[
+                        ints$s == nofsets & ints$v == as.numeric(ellipse) &
+                        is.element(ints$i, zones),
+                        c("x", "y")
+                    ]
 
                     if (is.null(gvenn)) {
                         polygon(plotdata, col = ttcolors[i])
                     }
                     else {
-                        gvenn <- gvenn + ggplot2::geom_polygon(data = plotdata, ggplot2::aes(x, y), fill = ttcolors[i])
+                        gvenn <- gvenn + ggplot2::geom_polygon(
+                            data = plotdata,
+                            ggplot2::aes(x, y),
+                        fill = ttcolors[i]
+                            )
                     }
-
                 }
             }
         }
@@ -402,7 +425,11 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     else if (is.list(x)) {
 
         if (any(grepl("\\$solution", funargs["x"]))) {
-            obj <- get(unlist(strsplit(funargs["x"], split = "[$]"))[1])
+            obj <- get(
+                unlist(
+                    strsplit(funargs["x"], split = "[$]")
+                )[1]
+            )
             snames <- obj$tt$options$conditions
             nofsets <- length(snames)
 
@@ -413,7 +440,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
 
             x <- as.list(apply(x, 1, function(y) {
                 y[y < 0] <- "-"
-                paste(y, collapse = "")
+                return(paste(y, collapse = ""))
             }))
 
         }
@@ -457,7 +484,11 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                 }
             )
 
-            names(intersections) <- apply(tt, 1, function(x) paste(snames[x == 1], collapse = ":"))
+            names(intersections) <- apply(
+                tt,
+                1,
+                function(x) paste(snames[x == 1], collapse = ":")
+            )
 
             cts <- unlist(lapply(intersections, length))
 
@@ -513,14 +544,19 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
 
     if (ilabels | counts & !is.null(cts)) {
 
-        ilabels <- icoords$l[icoords$s == nofsets & icoords$v == as.numeric(ellipse)]
+        ilabels <- icoords$l[
+            icoords$s == nofsets & icoords$v == as.numeric(ellipse)
+        ]
 
         if (counts) {
             cts[cts == 0] <- ""
             ilabels <- cts
         }
 
-        icoords <- icoords[icoords$s == nofsets & icoords$v == as.numeric(ellipse), c("x", "y")]
+        icoords <- icoords[
+            icoords$s == nofsets & icoords$v == as.numeric(ellipse),
+            c("x", "y")
+        ]
 
         if (ggplot) {
             for (i in which(ilabels != "")) {

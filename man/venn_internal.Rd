@@ -1,4 +1,4 @@
-\name{venn-internal}
+\name{venn internal functions}
 
 \alias{.onAttach}
 \alias{checkZone}

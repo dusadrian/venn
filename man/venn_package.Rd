@@ -1,6 +1,6 @@
-\name{venn-package}
+\name{About the venn package}
 
-\alias{venn-package}
+\alias{venn_package}
 
 
 \docType{package}

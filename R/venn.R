@@ -76,8 +76,10 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     listx <- FALSE
     cts <- NULL
 
-
-    if (is.numeric(counts)) {
+    if (is.null(counts)) {
+        counts <- FALSE
+    }
+    else if (is.numeric(counts)) {
         if (is.numeric(x)) {
             if (length(counts) == 2^x) {
                 cts <- counts
@@ -179,7 +181,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
 
         individual <- length(opacity) == nrow(tt)
 
-        gvenn <- openPlot(plotsize, par = par, ggplot = ggplot)
+        gvenn <- openPlot(plotsize, par = par, ggplot = ggplot, ... = ...)
 
         if (individual) {
 
@@ -534,7 +536,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     #        opacity = opacity, allborders = borders, ... = ...))
 
     if (!ttqca) {
-        gvenn <- openPlot(plotsize, par = par, ggplot = ggplot)
+        gvenn <- openPlot(plotsize, par = par, ggplot = ggplot, ... = ...)
     }
 
     gvenn <- plotRules(

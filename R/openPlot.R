@@ -1,5 +1,5 @@
 `openPlot` <-
-function(plotsize = 15, par = TRUE, ggplot = FALSE) {
+function(plotsize = 15, par = TRUE, ggplot = FALSE, ...) {
 
     if (ggplot) {
         cf <- ggplot2::coord_fixed()
@@ -34,7 +34,10 @@ function(plotsize = 15, par = TRUE, ggplot = FALSE) {
             
             par(new = FALSE, xpd = TRUE, mai = c(0.05, 0.05, 0.05, 0.05))
         }
-        plot(0:1000, type = "n", axes = FALSE, asp = 1, xlab = "", ylab = "")
+
+        suppressWarnings(plot(
+            0:1000, type = "n", axes = FALSE, asp = 1,
+            xlab = "", ylab = "", ... = ...
+        ))
     }
 }
-

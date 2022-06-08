@@ -35,9 +35,11 @@ function(plotsize = 15, par = TRUE, ggplot = FALSE, ...) {
             par(new = FALSE, xpd = TRUE, mai = c(0.05, 0.05, 0.05, 0.05))
         }
 
-        suppressWarnings(plot(
-            0:1000, type = "n", axes = FALSE, asp = 1,
-            xlab = "", ylab = "", ... = ...
-        ))
+        dots <- list(...)
+        plot(x = 0:1000, type = "n", axes = FALSE, asp = 1, xlab = "", ylab = "")
+
+        if (!is.null(dots$main)) {
+            title(main = dots$main, line = dots$line)
+        }
     }
 }

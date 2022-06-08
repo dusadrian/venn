@@ -48,12 +48,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
     }
 
     if (!identical(zcolor, "bw") & !identical(zcolor, "style")) {
-        zcolor <- unlist(
-            strsplit(
-                gsub("[[:space:]]", "", zcolor),
-                split = ","
-            )
-        )
+        zcolor <- admisc::splitstr(zcolor)
 
         testcolor <- tryCatch(col2rgb(zcolor), error = function(e) e)
 

@@ -10,17 +10,16 @@ up to 7 sets.
 }
 
 \usage{
-venn(x, snames = "", counts, ilabels = FALSE, ellipse = FALSE,
-     zcolor = "bw", opacity = 0.3, plotsize = 15, ilcs = 0.6, sncs = 0.85,
-     borders = TRUE, box = TRUE, par = TRUE, ggplot = FALSE, ...)
+venn(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
+     opacity = 0.3, plotsize = 15, ilcs = 0.6, sncs = 0.85, borders = TRUE,
+     box = TRUE, par = TRUE, ggplot = FALSE, ...)
 }
 
 \arguments{
   \item{x}{A single number (of sets), or a metacommand formula (see details),
            or a list containing set values, or a dataset containing boolean values.}
   \item{snames}{An optional parameter containing the names for each set.}
-  \item{ilabels}{Logical: print the labels for each intersection.}
-  \item{counts}{A numerical vector of counts for each set intersection.}
+  \item{ilabels}{Complex argument, see Details.}
   \item{ellipse}{Logical, force the shape to an ellipse, where possible}
   \item{zcolor}{A vector of colors for the custom zones, or predefined colors
         if "style"}
@@ -47,9 +46,10 @@ The argument \bold{\code{x}} can be either:\cr
   and only up to 7 components are processed.\cr
 - a dataset of boolean values.\cr
          
-A "zone" is a union of set intersections. There are exactly \bold{\code{2^k}} intersections
-in a Venn diagram, where \bold{\code{k}} is the number of sets. To highlight an entire set,
-we need a union of all possible intersections which form that set.
+A "zone" is a union of set intersections. There are exactly \bold{\code{2^k}}
+intersections in a Venn diagram, where \bold{\code{k}} is the number of sets. To
+highlight an entire set, we need a union of all possible intersections which
+form that set.
 
 For example, in a 3 sets diagram, the (overall) first set is composed by four
 intersections:\cr
@@ -59,101 +59,117 @@ intersections:\cr
 \bold{\code{111}} for the intersection between all three sets.
 
 A meta-language can be used to define these intersections, using the values of
-\bold{\code{1}} for what is inside the set, \bold{\code{0}} for what is outside the set, and
-\bold{\code{-}} when its either inside or outside of the set.
+\bold{\code{1}} for what is inside the set, \bold{\code{0}} for what is outside
+the set, and \bold{\code{-}} when its either inside or outside of the set.
 
-The command \bold{\code{"1--"}} is translated as "display only the first, entire set" is
-equivalent with the union of the four intersections \bold{\code{"100 + 101 + 110 + 111"}}.
+The command \bold{\code{"1--"}} is translated as "display only the first, entire
+set" is equivalent with the union of the four intersections
+\bold{\code{"100 + 101 + 110 + 111"}}.
 
-The parameter \bold{\code{snames}} should have the same length as the number of sets
-specified by the parameter \bold{\code{x}}.
+The parameter \bold{\code{snames}} should have the same length as the number of
+sets specified by the parameter \bold{\code{x}}.
 
-When the parameter \bold{\code{x}} is used as a metacommand, the number of sets is calculated
-as the number of characters in each intersection of the metacommand. One such
-character command is \bold{\code{"100 + 101 + 110 + 111"}} or \bold{\code{"1--"}}, and all
-intersections have exactly three characters.
+When the parameter \bold{\code{x}} is used as a metacommand, the number of sets
+is calculated as the number of characters in each intersection of the
+metacommand. One such character command is \bold{\code{"100 + 101 + 110 + 111"}}
+or \bold{\code{"1--"}}, and all intersections have exactly three characters.
 
-It is also possible to use a regular, disjunctive normal form, like \bold{\code{"A"}},
-which is equivalent with \bold{\code{"Abc + AbC + ABc + ABC"}}. When \bold{\code{x}}
-is an expression written in DNF, if a valid R statement then quoting is not even necessary.
+It is also possible to use a regular, disjunctive normal form, like
+\bold{\code{"A"}}, which is equivalent with \bold{\code{"Abc + AbC + ABc + ABC"}}.
+When \bold{\code{x}} is an expression written in DNF, if a valid R statement
+then quoting is not even necessary.
 
-The argument \bold{\code{snames}} establishes names for the different sets, or in its absence
-it is taken from \bold{\code{LETTERS}}. When \bold{\code{x}} is a list or a dataframe,
-\bold{\code{snames}} is taken from their names. The length of the \bold{\code{snames}}
-indicates the total number of sets.
+The argument \bold{\code{snames}} establishes names for the different sets, or
+in its absence it is taken from \bold{\code{LETTERS}}. When \bold{\code{x}} is a
+list or a dataframe, \bold{\code{snames}} is taken from their names. The length
+of the \bold{\code{snames}} indicates the total number of sets.
 
-A numerical vector can be supplied with the argument \bold{\code{counts}}, when the argument
-\bold{\code{x}} is a single number of sets. The counts should match the increasing order of
-the binary representation for the set intersections. When the argument \bold{\code{x}} is a
-list, the counts are taken from the number of common values for each intersection, and when
-\bold{\code{x}} is a data frame, (comprised of exclusively boolean values 0 and 1) the counts
-are taken from the number of similar rows. If a particular intersection does not have any
-common values (or no rows), the count "0" is left blank and not displayed in the diagram.
+A numerical vector can be supplied with the argument \bold{\code{ilabels}}, when
+the argument \bold{\code{x}} is a single number of sets. The vector should match
+the increasing order of the binary representation for the set intersections.
 
-The argument \bold{\code{ellipse}} differentiates between two types of diagrams for 4 and 5 sets.
-The idea is to allow for as much space as possible for each intersection (also as equal
-as possible) and that is impossible if preserving the shape of an ellipse. The default is
-to create large space for the intersections, but users who prefer an ellipse might want
-to set this argument to \bold{\code{TRUE}}.
+This argumet can also be logical, and if activated with \code{TRUE} it constructs
+the intersection labels from their particular combinations of 0s and 1s.
 
-Colors to fill the desired zones (or entire sets) can be supplied via the argument
-\bold{\code{zcolor}} (the default is \bold{\code{"bw"}} black and white, which means no colors at all).
-Users can either chose the predefined color style, using \bold{\code{zcolor = "style"}}, or supply
-a vector of custom colors for each zone. If only one custom color is supplied, it will
-be recycled for all zones.
+Finally, it can also be specified as \code{ilabels = "counts"}, for counting the
+frequency of appearance of each intersection. When the argument \bold{\code{x}}
+is a list, the counts are taken from the number of common values for each
+intersection, and when \bold{\code{x}} is a data frame, (comprised of exclusively
+boolean values 0 and 1) the counts are taken from the number of similar rows. If
+a particular intersection does not have any common values (or no rows), the
+count "0" is left blank and not displayed in the diagram.
 
-When using \bold{\code{zcolor = "style"}}, any other additional arguments for the borders are
-ignored.
+The argument \bold{\code{ellipse}} differentiates between two types of diagrams
+for 4 and 5 sets. The idea is to allow for as much space as possible for each
+intersection (also as equal as possible) and that is impossible if preserving
+the shape of an ellipse. The default is to create large space for the
+intersections, but users who prefer an ellipse might want to set this argument
+to \bold{\code{TRUE}}.
 
-A different set of predefined colors is used, when argument \bold{\code{x}} is a QCA type object
-(a truth table, either from a class \bold{\code{tt}} or from a class \bold{\code{qca}}). If custom colors
-are provided via \bold{\code{zcolor}}, it should have a length of 3 colors: the first for the 
-absence of the outcome (\bold{\code{0}}), the second for the presence of the outcome (\bold{\code{1}}),
-and the third for the contradictions (\bold{\code{C}}). Remainders have no color, by default.
+Colors to fill the desired zones (or entire sets) can be supplied via the
+argument \bold{\code{zcolor}} (the default is \bold{\code{"bw"}} black and white,
+which means no colors at all). Users can either chose the predefined color style,
+using \bold{\code{zcolor = "style"}}, or supply a vector of custom colors for
+each zone. If only one custom color is supplied, it will be recycled for all
+zones.
 
-The argument \bold{\code{ilcs}} works only if the intersection labels (\bold{\code{ilabels}}) or
-intersection \bold{\code{counts}} are activated, and it sets the size of the labels via a
-\bold{\code{cex}} argument. In the absence of a specific value from the user, it's default is
-set to 0.6 for all Venn diagrams with up to five sets, and it automatically decreases to 0.5
-for six sets and 0.45 for seven sets.
+When using \bold{\code{zcolor = "style"}}, any other additional arguments for
+the borders are ignored.
 
-Via \bold{\code{...}}, users can specify additional parameters, mainly for the outer borders
-of the sets, as specified by \bold{\code{\link[graphics]{par}()}}, and since version 1.9 it is
-also used to pass additional aesthetics parameters for the ggplot2 graphics. All of them are
-feeded either to the base function \bold{\code{\link[graphics]{lines}()}} which is responsible
-with the borders, or to the function \bold{\code{\link[ggplot2]{geom_path}()}} from package
+A different set of predefined colors is used, when argument \bold{\code{x}} is a
+QCA type object (a truth table, either from a class \bold{\code{tt}} or from a
+class \bold{\code{qca}}). If custom colors are provided via \bold{\code{zcolor}},
+it should have a length of 3 colors: the first for the  absence of the outcome
+(\bold{\code{0}}), the second for the presence of the outcome (\bold{\code{1}}),
+and the third for the contradictions (\bold{\code{C}}). Remainders have no
+color, by default.
+
+The argument \bold{\code{ilcs}} works only if the intersection labels
+(\bold{\code{ilabels}}) have information, and it sets the size of the labels via
+a \bold{\code{cex}} argument. In the absence of a specific value from the user,
+it's default is set to 0.6 for all Venn diagrams with up to five sets, and it
+automatically decreases to 0.5 for six sets and 0.45 for seven sets.
+
+Via \bold{\code{...}}, users can specify additional parameters, mainly for the
+outer borders of the sets, as specified by \bold{\code{\link[graphics]{par}()}},
+and since version 1.9 it is also used to pass additional aesthetics parameters
+for the ggplot2 graphics. All of them are feeded either to the base function
+\bold{\code{\link[graphics]{lines}()}} which is responsible with the borders, or
+to the function \bold{\code{\link[ggplot2]{geom_path}()}} from package
 \pkg{ggplot2}.
 
-For up to 3 sets, the shapes can be circular. For more than 3 sets, the shape cannot be
-circular: for 4 and 5 sets they can be ellipses, while for more than 5 sets the
-shapes cannot be continous (they might be monotone, but not continous). The 7 sets
-diagram is called "Adelaide" (Ruskey, 2005).
+For up to 3 sets, the shapes can be circular. For more than 3 sets, the shape
+cannot be circular: for 4 and 5 sets they can be ellipses, while for more than 5
+sets the shapes cannot be continous (they might be monotone, but not continous).
+The 7 sets diagram is called "Adelaide" (Ruskey, 2005).
 
 The most challenging diagram is the one with 6 sets, where for many years it was
-thought a Venn diagram didn't even exist. All diagrams are symetric, except for the
-one with 6 sets, where some of the sets have different shapes. The diagram in this
-package is an adaptation from Mamakani, K., Myrvold W. and F. Ruskey (2011).
+thought a Venn diagram didn't even exist. All diagrams are symetric, except for
+the one with 6 sets, where some of the sets have different shapes. The diagram
+in this package is an adaptation from Mamakani, K., Myrvold W. and F. Ruskey (2011).
 
-The argument \bold{\code{border}} can be used only for custom intersections and/or unions,
-it has no effect when \bold{\code{x}} is a list, or a data frame, or a truth table object.
+The argument \bold{\code{border}} can be used only for custom intersections
+and/or unions, it has no effect when \bold{\code{x}} is a list, or a data frame,
+or a truth table object.
 
-The argument \bold{\code{par}} is used to define a custom set of parameters when producing
-the plot, to ensure a square shape of about 15 cm and eliminate the outer regions. If
-deactivated, users can define their own size and shape of the plot using the system function
-\bold{\code{\link[graphics]{par}()}}. By default, the plot is always produced using a size of
-1000 points for both horizontal and vertical, unless the argument \bold{\code{ggplot}} is
-activated, when the argument \bold{\code{par}} will have no effect.
+The argument \bold{\code{par}} is used to define a custom set of parameters when
+producing the plot, to ensure a square shape of about 15 cm and eliminate the
+outer regions. If deactivated, users can define their own size and shape of the
+plot using the system function \bold{\code{\link[graphics]{par}()}}. By default,
+the plot is always produced using a size of 1000 points for both horizontal and
+vertical, unless the argument \bold{\code{ggplot}} is activated, when the
+argument \bold{\code{par}} will have no effect.
 }
 
 
 \references{
 
-Ruskey, F. and M. Weston. 2005. \emph{Venn diagrams}. Electronic Journal of Combinatorics,
-Dynamic Survey DS5.
+Ruskey, F. and M. Weston. 2005. \emph{Venn diagrams}. Electronic Journal of
+Combinatorics, Dynamic Survey DS5.
 
-Mamakani, K., Myrvold W. and F. Ruskey. 2011. \emph{Generating all Simple Convexly-drawable
-Polar Symmetric 6-Venn Diagrams}. International Workshop on Combinatorial Algorithms, Victoria.
-LNCS, 7056, 275-286.
+Mamakani, K., Myrvold W. and F. Ruskey. 2011. \emph{Generating all Simple
+Convexly-drawable Polar Symmetric 6-Venn Diagrams}. International Workshop on
+Combinatorial Algorithms, Victoria. LNCS, 7056, 275-286.
 
 }
 
@@ -238,23 +254,23 @@ venn("A + B~C", snames = "A, B, C, D")
 # when x is a list
 set.seed(12345)
 x <- list(First = 1:20, Second = 10:30, Third = sample(25:50, 15))
-venn(x)
+venn(x, ilabels = "counts")
 
 
 # when x is a dataframe
 set.seed(12345)
 x <- as.data.frame(matrix(sample(0:1, 150, replace = TRUE), ncol = 5))
-venn(x)
+venn(x, ilabels = "counts")
 
 
 # producing a ggplot2 graphics
-venn(x, ggplot = TRUE)
+venn(x, ilabels = "counts", ggplot = TRUE)
 
 # increasing the border size
-venn(x, ggplot = TRUE, size = 1.5)
+venn(x, ilabels = "counts", ggplot = TRUE, size = 1.5)
 
 # with dashed lines
-venn(x, ggplot = TRUE, linetype = "dashed")
+venn(x, ilabels = "counts", ggplot = TRUE, linetype = "dashed")
 
 
 \dontrun{

@@ -1,11 +1,47 @@
 `venn` <-
-function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
-    zcolor = "bw", opacity = 0.3, plotsize = 15, ilcs = 0.6, sncs = 0.85,
-    borders = TRUE, box = TRUE, par = TRUE, ggplot = FALSE, ...) {
+function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
+    opacity = 0.3, plotsize = 15, ilcs = 0.6, sncs = 0.85, borders = TRUE,
+    box = TRUE, par = TRUE, ggplot = FALSE, ...) {
 
     if (missing(x)) {
         admisc::stopError("Argument <x> is missing.")
     }
+    
+    dots <- list(...)
+    counts <- dots$counts
+    cts <- NULL
+
+    if (!is.null(ilabels)) {
+        if (identical(ilabels, "counts")) {
+            counts <- TRUE
+            ilabels <- NULL
+        }
+        else {
+            if (isTRUE(ilabels)) {
+                counts <- NULL
+            }
+            else {
+                if (is.atomic(ilabels) && !is.logical(ilabels)) {
+                    cts <- ilabels
+                    counts <- NULL
+                    ilabels <- NULL
+                }
+            }
+        }
+    }
+
+    if (is.null(counts)) {
+        counts <- FALSE
+    }
+    else {
+        if (is.atomic(counts) && !is.logical(counts)) {
+            cts <- counts
+            counts <- TRUE
+        }
+
+        counts <- isTRUE(counts)
+    }
+
 
     if (ggplot) {
         ilcs <- ilcs * 2.5 / 0.6
@@ -69,28 +105,10 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
 
     ttqca <- FALSE
     listx <- FALSE
-    cts <- NULL
-
-    if (is.null(counts)) {
-        counts <- FALSE
-    }
-    else if (is.numeric(counts)) {
-        if (is.numeric(x)) {
-            if (length(counts) == 2^x) {
-                cts <- counts
-                counts <- TRUE
-            }
-            else {
-                counts <- FALSE
-            }
-        }
-        else {
-            counts <- FALSE
-        }
-    }
+    
 
     if (any(is.element(c("qca", "QCA_min", "tt", "QCA_tt"), class(x)))) {
-    # if (inherits(x, "qca") | inherits(x, "tt")) {
+        # if (inherits(x, "qca") | inherits(x, "tt")) {
 
         ttqca <- TRUE
         otype <- "input"
@@ -307,10 +325,14 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                     }
                 }
             }
+        }        
+
+        if (isTRUE(counts) & is.null(cts)) {
+            cts <- tt$n
         }
 
-        cts <- tt$n
         x <- nofsets
+
 
     }
     else if (is.numeric(x)) {
@@ -393,10 +415,7 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
             nofsets <- length(x)
         }
 
-        # if (is.numeric(counts) && length(counts) == nrow(x) && length(counts) <= 2^ncol(x)) {
-        #     cts <- counts
-        # }
-        # else {
+        if (isTRUE(counts) & is.null(cts)) {
             cts <- apply(
                 sapply(
                     rev(seq(nofsets)),
@@ -414,9 +433,8 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                     }))
                 }
             )
-        # }
+        }
 
-        counts <- TRUE
         x <- nofsets
     }
     else if (is.list(x)) {
@@ -487,20 +505,29 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
                 function(x) paste(snames[x == 1], collapse = ":")
             )
 
-            cts <- unlist(lapply(intersections, length))
+            ttcts <- unlist(lapply(intersections, length))
 
-            intersections <- intersections[cts > 0]
+            intersections <- intersections[ttcts > 0]
 
-            tt <- as.data.frame(cbind(tt, counts = cts))
+            tt <- as.data.frame(cbind(tt, counts = ttcts))
 
             attr(tt, "intersections") <- intersections
 
-            counts <- TRUE
+            if (isTRUE(counts) & is.null(cts)) {
+                cts <- ttcts
+            }
+
             x <- nofsets
         }
     }
     else {
         admisc::stopError("Unrecognised argument <x>.")
+    }
+
+    
+    if (length(cts) != 2^nofsets) {
+        cts <- NULL
+        counts <- NULL
     }
 
     if (nofsets > 7) {
@@ -539,14 +566,18 @@ function(x, snames = "", counts = NULL, ilabels = FALSE, ellipse = FALSE,
         gvenn = gvenn, ... = ...
     )
 
-    if (ilabels | counts & !is.null(cts)) {
+    if (isTRUE(ilabels) | !is.null(cts)) {
 
-        ilabels <- icoords$l[
-            icoords$s == nofsets & icoords$v == as.numeric(ellipse)
-        ]
+        if (isTRUE(ilabels)) {
+            ilabels <- icoords$l[
+                icoords$s == nofsets & icoords$v == as.numeric(ellipse)
+            ]
+        }
+        else {
+            if (isTRUE(counts)) {
+                cts[cts == 0] <- ""
+            }
 
-        if (counts) {
-            cts[cts == 0] <- ""
             ilabels <- cts
         }
 

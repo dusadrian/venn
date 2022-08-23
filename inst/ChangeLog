@@ -1,3 +1,15 @@
+Version 1.12
+    o Argument "counts" is now deprecated, the same information can be passed to
+      the argument "ilabels"
+      
+Version 1.11
+    o Solved bug related plotting counts for QCA objects
+      (thanks to yanbinghan for the report)
+    o Argument "counts" is now deprecated, the same information can be passed to
+      the argument "ilabels"
+    o Some more graphical parameters are possible to be passed via the three
+      dots ... argument
+      
 Version 1.10
     o Solved bug related to fill colors with ggplot graphics
       (thanks to Dan Chaltiel for the report)

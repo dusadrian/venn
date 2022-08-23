@@ -205,7 +205,7 @@ The input can be a list
 ``` r
 set.seed(12345)
 x <- list(First = 1:20, Second = 10:30, Third = sample(25:50, 15))
-venn(x)
+venn(x, ilabels = "counts")
 ```
 
 <img src="man/figures/fig19.svg" width="50%" />
@@ -216,7 +216,7 @@ Or a dataframe
 ``` r
 set.seed(12345)
 x <- as.data.frame(matrix(sample(0:1, 150, replace = TRUE), ncol = 5))
-venn(x)
+venn(x, ilabels = "counts")
 ```
 
 <img src="man/figures/fig20.svg" width="50%" />
@@ -224,7 +224,7 @@ venn(x)
 
 Using ggplot2 graphics
 ``` r
-venn(x, ggplot = TRUE)
+venn(x, ilabels = "counts", ggplot = TRUE)
 ```
 
 <img src="man/figures/fig21.svg" width="50%" />
@@ -232,7 +232,7 @@ venn(x, ggplot = TRUE)
 
 Increasing the border size
 ``` r
-venn(x, ggplot = TRUE, size = 1.5)
+venn(x, ilabels = "counts", ggplot = TRUE, size = 1.5)
 ```
 
 <img src="man/figures/fig22.svg" width="50%" />
@@ -240,7 +240,7 @@ venn(x, ggplot = TRUE, size = 1.5)
 
 With dashed lines
 ``` r
-venn(x, ggplot = TRUE, linetype = "dashed")
+venn(x, ilabels = "counts", ggplot = TRUE, linetype = "dashed")
 ```
 
 <img src="man/figures/fig23.svg" width="50%" />

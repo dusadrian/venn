@@ -63,7 +63,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         })
 
 
-        # check if any of the remaining rowns define a whole set
+        # check if any of the remaining rows define a whole set
 
         # wholesets will be a numeric vector:
         # 0 if it's not a whole set
@@ -105,7 +105,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         if (any(!irregular)) { # normal shapes
             if (any(wholesets > 0)) {
                 for (i in which(wholesets > 0)) {
-                    # [[1]] simulates getZones() because sometimes there might be multipe zones
+                    # [[1]] simulates getZones() because sometimes there might be multiple zones
                     zones[[i]][[1]] <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == wholesets[i], c("x", "y")]
                 }
             }

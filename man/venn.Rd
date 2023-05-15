@@ -88,7 +88,7 @@ A numerical vector can be supplied with the argument \bold{\code{ilabels}}, when
 the argument \bold{\code{x}} is a single number of sets. The vector should match
 the increasing order of the binary representation for the set intersections.
 
-This argumet can also be logical, and if activated with \code{TRUE} it constructs
+This argument can also be logical, and if activated with \code{TRUE} it constructs
 the intersection labels from their particular combinations of 0s and 1s.
 
 Finally, it can also be specified as \code{ilabels = "counts"}, for counting the
@@ -133,7 +133,7 @@ automatically decreases to 0.5 for six sets and 0.45 for seven sets.
 Via \bold{\code{...}}, users can specify additional parameters, mainly for the
 outer borders of the sets, as specified by \bold{\code{\link[graphics]{par}()}},
 and since version 1.9 it is also used to pass additional aesthetics parameters
-for the ggplot2 graphics. All of them are feeded either to the base function
+for the ggplot2 graphics. All of them are fed either to the base function
 \bold{\code{\link[graphics]{lines}()}} which is responsible with the borders, or
 to the function \bold{\code{\link[ggplot2]{geom_path}()}} from package
 \pkg{ggplot2}.
@@ -144,7 +144,7 @@ sets the shapes cannot be continous (they might be monotone, but not continous).
 The 7 sets diagram is called "Adelaide" (Ruskey, 2005).
 
 The most challenging diagram is the one with 6 sets, where for many years it was
-thought a Venn diagram didn't even exist. All diagrams are symetric, except for
+thought a Venn diagram didn't even exist. All diagrams are symmetric, except for
 the one with 6 sets, where some of the sets have different shapes. The diagram
 in this package is an adaptation from Mamakani, K., Myrvold W. and F. Ruskey (2011).
 

@@ -18,7 +18,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
 
     # create dummy global variables x and y to comply with R CMD check
     # when they are used for aes(x, y) in ggplots
-    x <- NULL 
+    x <- NULL
     y <- NULL
 
 
@@ -214,7 +214,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
 
             if (length(other.args) > 0) {
 
-                # there might be different border colors for each zone (set in this case) 
+                # there might be different border colors for each zone (set in this case)
                 # arguments are recycled to the length of the zones
                 other.args <- lapply(other.args, function(x) {
                     rep(x, length.out = nofsets)

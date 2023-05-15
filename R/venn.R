@@ -325,7 +325,7 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
                     }
                 }
             }
-        }        
+        }
 
         if (isTRUE(counts) & is.null(cts)) {
             cts <- tt$n
@@ -652,17 +652,17 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
                 xmin = 10, xmax = 32, ymin = -44, ymax = -22,
                 fill = ttcolors[1],
                 col = "black"
-            ) + 
+            ) +
             ggplot2::annotate("rect",
                 xmin = 120, xmax = 142, ymin = -44, ymax = -22,
                 fill = ttcolors[2],
                 col = "black"
-            ) + 
+            ) +
             ggplot2::annotate("rect",
                 xmin = 230, xmax = 252, ymin = -44, ymax = -22,
                 fill = ttcolors[3],
                 col = "black"
-            ) + 
+            ) +
             ggplot2::annotate("rect",
                 xmin = 340, xmax = 362, ymin = -44, ymax = -22,
                 fill = ttcolors[4],

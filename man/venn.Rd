@@ -26,7 +26,7 @@ venn(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
   \item{opacity}{Degree of opacity for the color(s) specified with
         \code{zcolor} (less opacity, more transparency).}
   \item{plotsize}{Plot size, in centimeters.}
-  \item{ilcs}{Character expansion (in base plots) or size (in ggplots) 
+  \item{ilcs}{Character expansion (in base plots) or size (in ggplots)
         for the intersection labels}
   \item{sncs}{Character expansion (in base plots) or size (in ggplots)
         for the set names}
@@ -38,14 +38,14 @@ venn(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
 }
 
 \details{
-    
+
 The argument \bold{\code{x}} can be either:\cr
 - a single number (of sets), between 1 and 7\cr
 - a metacommand (character) to draw custom intersection zones\cr
 - a list, containing values for the different sets: each component is a set,
   and only up to 7 components are processed.\cr
 - a dataset of boolean values.\cr
-         
+
 A "zone" is a union of set intersections. There are exactly \bold{\code{2^k}}
 intersections in a Venn diagram, where \bold{\code{k}} is the number of sets. To
 highlight an entire set, we need a union of all possible intersections which

@@ -147,8 +147,7 @@ function(rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3,
         }
     }
     else {
-        cat("\n")
-        stop(simpleError("Something went wrong\n\n"))
+        admisc::stopError("Something went wrong.")
     }
 
 

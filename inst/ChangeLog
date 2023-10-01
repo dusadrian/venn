@@ -1,7 +1,10 @@
 Version 1.12
+    o New function extractInfo()
+    o An error is generated if the input is a QCA truth table with more than
+      seven explanatory conditions (thanks to Leo Gurtler for the report)
     o Argument "counts" is now deprecated, the same information can be passed to
       the argument "ilabels"
-      
+
 Version 1.11
     o Solved bug related plotting counts for QCA objects
       (thanks to yanbinghan for the report)
@@ -9,23 +12,23 @@ Version 1.11
       the argument "ilabels"
     o Some more graphical parameters are possible to be passed via the three
       dots ... argument
-      
+
 Version 1.10
     o Solved bug related to fill colors with ggplot graphics
       (thanks to Dan Chaltiel for the report)
     o Package venn now depends on R >= 3.5.0
-      
+
 Version 1.9
-    o Better handling of internal data, possibly solving rare bugs when installing
-      in non-standard, custom directories
-    o Argument "size" from function venn() renamed to "plotsize", as the former is
-      a formal argument for the ggplot2 function geom_path()
+    o Better handling of internal data, possibly solving rare bugs when
+      installing in non-standard, custom directories
+    o Argument "size" from function venn() renamed to "plotsize", as the former
+      is a formal argument for the ggplot2 function geom_path()
     o Added flexibility when using additional aesthetic ggplot parameters
-      
+
 Version 1.8
     o New arguments "box", "par" and "ggplot" to function venn()
       (thanks to Mehrad Mahmoudian for the suggestion)
-    o Arguments "cexil" and "cexsn" in function venn() 
+    o Arguments "cexil" and "cexsn" in function venn()
       renamed to "ilcs" and "sncs"
     o Function venn() now accepts set names containing spaces
       (thanks to Andre Gohr for the suggestion)
@@ -47,17 +50,17 @@ Version 1.5
     o Adapted to package QCA version 3.0
     o Replaced the argument "nofsets" with "snames", in function getZones()
     o Argument "transparency" renamed to "opacity"
-    o Arguments "zcolor" and "col" in function venn() now accept a single character
-      expression, as well as a character vector to specify colors
+    o Arguments "zcolor" and "col" in function venn() now accept a single
+      character expression, as well as a character vector to specify colors
     o Removed suggestion to package QCAGUI, which is now merged into package QCA
-    o Argument cexil in function venn() is now defaulted to 0.6, with an automatic
-      change to 0.5 for six sets and 0.45 for seven sets
-    o When the input is a list, invisibly return the truth table and the counts for
-      each intersection, with an attribute called "intersections" containing its 
-      elements (thanks to Jeena Ganga for the suggestion)
+    o Argument cexil in function venn() is now defaulted to 0.6, with an
+      automatic change to 0.5 for six sets and 0.45 for seven sets
+    o When the input is a list, invisibly return the truth table and the counts
+      for each intersection, with an attribute called "intersections" containing
+      its elements (thanks to Jeena Ganga for the suggestion)
 
 Version 1.2
-    o Adaptation to package QCA version 2.2 
+    o Adaptation to package QCA version 2.2
     o Fixed a bug when interpreting a SOP expression, the negation of a set
       was interpreted as the set itself
     o When the expression is a valid R statement, quoting is not necessary
@@ -68,14 +71,14 @@ Version 1.1
     o New feature to draw a Venn diagram using a SOP (sum of products) expression
     o QCA type objects can have transparency based on the inclusion score
     o Parameters for borders can have lengths, recycled to the length of zones
-    
+
       The following were all suggested by Tom Wenseleers (with thanks):
-      
+
     o The plot window is now forced to a square, using asp = 1
     o New shapes for 4 and 5 sets, to maximize the space for intersections
     o Default color styles, and associated border colors
     o Variable text size for the intersection labels and for the set names
-    
-    
+
+
 Version 1.0
     o First version of the package

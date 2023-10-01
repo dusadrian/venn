@@ -20,7 +20,7 @@ getZones(area, snames, ellipse = FALSE)
 }
 
 \details{
-         
+
 A SOP ("sum of products") is also known as a DNF ("disjunctive normal form"), or in other
 words a "union of intersections", for example \bold{\code{A*D + B*c}}.
 

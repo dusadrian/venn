@@ -1,15 +1,22 @@
-`venn` <-
-function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
+`venn` <- function(
+    x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
     opacity = 0.3, plotsize = 15, ilcs = 0.6, sncs = 0.85, borders = TRUE,
-    box = TRUE, par = TRUE, ggplot = FALSE, ...) {
+    box = TRUE, par = TRUE, ggplot = FALSE, ...
+) {
 
     if (missing(x)) {
         admisc::stopError("Argument <x> is missing.")
     }
-    
+
     dots <- list(...)
     counts <- dots$counts
     cts <- NULL
+
+    tjqca <- is.element("trajectory", names(dots))
+    trajectory <- dots$trajectory
+    tjcases <- names(dots$trajectory)
+
+    dots$trajectory <- NULL
 
     if (!is.null(ilabels)) {
         if (identical(ilabels, "counts")) {
@@ -66,7 +73,7 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
     if (!is.element("cexil", names(funargs))) {
         names(funargs)[which(names(funargs) == "cexil")] <- "ilcs"
     }
- 
+
     if (!is.element("cexsn", names(funargs))) {
         names(funargs)[which(names(funargs) == "cexsn")] <- "sncs"
     }
@@ -105,7 +112,6 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
 
     ttqca <- FALSE
     listx <- FALSE
-    
 
     if (any(is.element(c("qca", "QCA_min", "tt", "QCA_tt"), class(x)))) {
         # if (inherits(x, "qca") | inherits(x, "tt")) {
@@ -131,6 +137,9 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
                 )
             )
             noflevels <- x$noflevels
+
+            rnms <- rownames(x$initial.data)
+            ttcases <- x$tt$cases
         }
         else {
             QCA <- all(
@@ -151,6 +160,18 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
                 )
             )
             noflevels <- x$tt$noflevels
+
+            rnms <- rownames(x$tt$initial.data)
+            ttcases <- x$tt$tt$cases
+        }
+
+        if (tjqca) {
+            if (!identical(
+                sort(tjcases),
+                sort(unique(gsub("[0-9]", "", rnms)))
+            )) {
+                admisc::stopError("Case names do not match the truth table.")
+            }
         }
 
         if (!QCA) {
@@ -170,6 +191,12 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
 
         if (nofsets == 0) {
             nofsets <- length(snames)
+        }
+
+        if (nofsets > 7) {
+            admisc::stopError(
+                "Venn diagrams can only be drawn up to 7 explanatory conditions."
+            )
         }
 
         if (nofsets < 4 | nofsets > 5) {
@@ -194,7 +221,13 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
 
         individual <- length(opacity) == nrow(tt)
 
-        gvenn <- openPlot(plotsize, par = par, ggplot = ggplot, ... = ...)
+        gvenn <- do.call(
+            openPlot,
+            c(
+                list(plotsize, par = par, ggplot = ggplot),
+                dots
+            )
+        )
 
         if (individual) {
 
@@ -524,14 +557,14 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
         admisc::stopError("Unrecognised argument <x>.")
     }
 
-    
+
     if (length(cts) != 2^nofsets) {
         cts <- NULL
         counts <- NULL
     }
 
     if (nofsets > 7) {
-        admisc::stopError("Venn diagrams can be drawn up to 7 sets.")
+        admisc::stopError("Venn diagrams can only be drawn up to 7 sets.")
     }
     else if (nofsets < 4 | nofsets > 5) {
         ellipse <- FALSE
@@ -566,14 +599,13 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
         gvenn = gvenn, ... = ...
     )
 
-    if (isTRUE(ilabels) | !is.null(cts)) {
+    if (isTRUE(ilabels) | !is.null(cts) | tjqca) {
 
         if (isTRUE(ilabels)) {
             ilabels <- icoords$l[
                 icoords$s == nofsets & icoords$v == as.numeric(ellipse)
             ]
-        }
-        else {
+        } else if (!is.null(cts)) {
             if (isTRUE(counts)) {
                 cts[cts == 0] <- ""
             }
@@ -586,17 +618,107 @@ function(x, snames = "", ilabels = NULL, ellipse = FALSE, zcolor = "bw",
             c("x", "y")
         ]
 
-        if (ggplot) {
-            for (i in which(ilabels != "")) {
-                gvenn <- gvenn + ggplot2::annotate("text",
-                    x = icoords$x[i], y = icoords$y[i],
-                    label = ilabels[i],
-                    size = ilcs
-                )
+        if (!is.null(ilabels)) {
+            if (ggplot) {
+                for (i in which(ilabels != "")) {
+                    gvenn <- gvenn + ggplot2::annotate("text",
+                        x = icoords$x[i], y = icoords$y[i],
+                        label = ilabels[i],
+                        size = ilcs
+                    )
+                }
+            }
+            else {
+                text(icoords, labels = ilabels, cex = ilcs)
             }
         }
-        else {
-            text(icoords, labels = ilabels, cex = ilcs)
+
+        if (tjqca) {
+            ttcases <- strsplit(gsub(";", ",", ttcases), split = ",")
+            caselist <- lapply(tjcases, function(x) {
+                # local rnms <- global rnms (the local dissapears with the next x)
+                rnms <- rnms[is.element(gsub("[0-9]", "", rnms), x)]
+                rnmsindex <- c()
+                for (i in seq(length(rnms))) {
+                    rnmsindex <- c(
+                        rnmsindex,
+                        which(sapply(ttcases, function(x) {
+                            any(x == rnms[i])
+                        }))
+                    )
+                }
+
+                return(rle(rnmsindex))
+            })
+
+            # names(caselist) <- tjcases
+            # return(caselist)
+
+            for (case in seq(length(tjcases))) {
+                rlecase <- caselist[[case]]
+                lengths <- rlecase$lengths
+                values <- rlecase$values
+                uvalues <- unique(values)
+                jx <- jitter(icoords$x[uvalues], factor = 2)
+                jy <- jitter(icoords$y[uvalues], factor = 2)
+                x <- jx[match(values, uvalues)]
+                y <- jy[match(values, uvalues)]
+                tcase <- trajectory[[tjcases[case]]]
+
+                if (is.null(tcase$length)) {
+                    tcase$length <- 0.12
+                }
+
+                if (is.null(tcase$lwd)) {
+                    tcase$lwd <- 2
+                }
+
+                if (is.null(tcase$col)) {
+                    tcase$col <- "black"
+                }
+
+                if (length(values) == 1) {
+                    points(
+                        x,
+                        y,
+                        pch = ifelse(is.null(tcase$pch), 20, tcase$pch),
+                        cex = ifelse(is.null(tcase$cex), 2, tcase$cex),
+                        col = tcase$col
+                    )
+                }
+                else {
+                    i <- 1
+                    j <- 2
+                    while (i <= length(values) - 1) {
+                        if (i == 1 & lengths[1] > 1) {
+                            points(
+                                x[1],
+                                y[1],
+                                pch = ifelse(is.null(tcase$pch), 20, tcase$pch),
+                                cex = ifelse(is.null(tcase$cex), 1.5, tcase$cex),
+                                col = tcase$col
+                            )
+                        }
+
+                        back <- FALSE
+                        while (j <= length(values)) {
+                            if (j < length(values)) {
+                                back <- values[j + 1] == values[i]
+                            }
+
+                            callist <- c(
+                                list(x[i], y[i], x[j], y[j]),
+                                tcase
+                            )
+                            callist$code <- 2 # + back
+
+                            do.call(graphics::arrows, callist)
+                            j <- j + 1 + back
+                        }
+                        i <- i + 1 + back
+                    }
+                }
+            }
         }
     }
 

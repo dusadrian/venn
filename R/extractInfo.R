@@ -1,4 +1,6 @@
-`extractInfo` <- function(x, what = c("counts", "intersections", "both")) {
+`extractInfo` <- function(
+    x, what = c("counts", "intersections", "both"), use.names = FALSE
+) {
 
     what <- match.arg(what)
 
@@ -35,6 +37,10 @@
             setdiff(Reduce(intersect, x[y == 1]), unlist(x[y == 0]))
         }
     )
+
+    if (!isTRUE(use.names)) {
+        snames <- seq(length(snames))
+    }
 
     names(intersections) <- apply(
         tt,

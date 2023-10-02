@@ -10,12 +10,15 @@ between several sets.
 }
 
 \usage{
-extractInfo(x, what = c("counts", "intersections", "both"))
+extractInfo(
+  x, what = c("counts", "intersections", "both"), use.names = FALSE
+)
 }
 
 \arguments{
   \item{x}{A list object containing set elements}
   \item{what}{What to extract}
+  \item{use.names}{Logical, use the set names to indicate intersections}
 }
 
 

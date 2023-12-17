@@ -1,28 +1,21 @@
 `getZones` <-
 function(area, snames, ellipse = FALSE) {
-    
-    funargs <- unlist(lapply(match.call(), deparse)[-1])
-    
-    # borders
-    # s - sets; v - version; b - borders; x,y - coordinates
 
-    # intersection borders
-    # s - sets; v - version; i - intersection; b - border
-    
+    funargs <- unlist(lapply(match.call(), deparse)[-1])
+
     if (is.character(area)) {
         x <- gsub("[[:space:]]", "", area)
-        
-        
+
         if (!all(gsub("0|1|-", "", x) == "")) {
-            
+
             if (any(grepl("\\$solution", funargs["area"]))) {
                 obj <- get(unlist(strsplit(funargs["area"], split = "[$]"))[1])
                 snames <- obj$tt$options$conditions
                 x <- paste(x, collapse = " + ")
             }
-            
+
             x <- gsub("[[:space:]]", "", x)
-            
+
             if (!all(gsub("0|1|-|\\+", "", x) == "")) {
                 
                 x <- admisc::translate(x, snames = snames)
@@ -34,30 +27,28 @@ function(area, snames, ellipse = FALSE) {
                     paste(y, collapse="")
                 }), collapse = "+")
             }
-            
-            
+
             # then check again
             if (!all(gsub("0|1|-|\\+", "", x) == "")) {
                 cat("\n")
                 stop("Invalid specification of the area.\n\n", call. = FALSE)
             }
-            
+
             area <- unlist(strsplit(x, split="\\+"))
-            
         }
-        
+
         nofsets <- unique(nchar(area))
-        
+
         if (length(nofsets) > 1) {
             cat("\n")
             stop("Different numbers of sets in the area.\n\n", call. = FALSE)
         }
-        
+
         if (!identical(unique(gsub("1|0|-", "", area)), "")) {
             cat("\n")
             stop("The arguent \"area\" should only contain \"1\"s, \"0\"s and dashes \"-\".\n\n", call. = FALSE)
         }
-        
+
         area <- sort(unique(unlist(lapply(strsplit(area, split = ""), function(x) {
             dashes <- x == "-"
             
@@ -85,20 +76,20 @@ function(area, snames, ellipse = FALSE) {
     else {
         nofsets <- snames
     }
-    
+
     area <- area + 1
-    
-    
+
+
     if (nofsets < 4 | nofsets > 5) {
         ellipse <- FALSE
     }
-    
+
     if (identical(area, 1)) {
         area <- seq(2^nofsets)[-1]
     }
-    
+
     if (length(area) > 1) {
-        
+
         checkz <- logical(length(area))
         names(checkz) <- area
         checkz[1] <- TRUE
@@ -120,8 +111,8 @@ function(area, snames, ellipse = FALSE) {
     else {
         result = list(area)
     }
-    
-    
+
+
     result <- lapply(result, function(x) {
         
         b <- ib$b[ib$s == nofsets & ib$v == as.numeric(ellipse) & is.element(ib$i, x)]
@@ -130,19 +121,19 @@ function(area, snames, ellipse = FALSE) {
             b <- setdiff(b, b[duplicated(b)])
             # b <- unique(b)
         }
-        
+
         # print(ib[ib$s == nofsets & ib$v == as.numeric(ellipse) & ib$b %in% b, ])
-        
+
         v2 <- borders[borders$s == nofsets & borders$v == as.numeric(ellipse) & borders$b == b[1], c("x", "y")]
         v2 <- v2[-nrow(v2), ] # get rid of the NAs, we want a complete polygon
         ends <- as.numeric(v2[nrow(v2), ])
-        
+
         checkb <- logical(length(b))
         names(checkb) <- b
         checkb[1] <- TRUE
-        
+
         counter <- 0
-        
+
         while(!all(checkb)) {
             
             # do.call("rbind", lapply(... ???
@@ -166,7 +157,7 @@ function(area, snames, ellipse = FALSE) {
                     ends <- as.vector(v2[nrow(v2), ])
                 }
             }
-            
+
             counter <- counter + 1
             
             if (counter > length(checkb)) {
@@ -175,10 +166,10 @@ function(area, snames, ellipse = FALSE) {
                 stop("Unknown error.\n\n", call. = FALSE)
             }
         }
-        
-        
+
+
         return(rbind(v2, rep(NA, 2)))
     })
-    
+
     return(result)
 }

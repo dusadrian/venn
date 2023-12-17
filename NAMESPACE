@@ -1,5 +1,4 @@
-export(.onAttach,
-       checkZone,
+export(checkZone,
        extractInfo,
        getCentroid,
        getZones,
@@ -7,9 +6,8 @@ export(.onAttach,
        plotRules,
        venn)
 import(admisc)
-importFrom("grDevices", "adjustcolor", "dev.cur", "dev.new")
-importFrom("graphics", "lines", "par", "plot", "polygon",
-           "polypath", "text", "points", "title")
+importFrom("grDevices", "adjustcolor", "col2rgb", "colorRampPalette", "dev.cur",
+       "dev.new", "rgb")
+importFrom("graphics", "lines", "par", "plot", "polygon", "polypath", "text",
+       "points", "title")
 importFrom("utils", "tail", "packageDescription", "read.csv", "capture.output")
-importFrom("grDevices", "colorRampPalette")
-importFrom("grDevices", "col2rgb", "rgb")

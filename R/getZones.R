@@ -1,6 +1,7 @@
-`getZones` <-
-function(area, snames, ellipse = FALSE) {
-
+`getZones` <- function(area, snames, ellipse = FALSE) {
+    borders <- getBorders()
+    ib <- getIntBord()
+    
     funargs <- unlist(lapply(match.call(), deparse)[-1])
 
     if (is.character(area)) {

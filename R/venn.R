@@ -8,13 +8,17 @@
         admisc::stopError("Argument <x> is missing.")
     }
 
+    icoords <- getIntCoords()
+    scoords <- getSetCoords()
+    ints <- getInts()
+
     dots <- list(...)
     counts <- dots$counts
     cts <- NULL
 
     tjqca <- is.element("trajectory", names(dots))
     trajectory <- dots$trajectory
-    tjcases <- names(dots$trajectory)
+    tjcases <- names(trajectory)
 
     dots$trajectory <- NULL
 

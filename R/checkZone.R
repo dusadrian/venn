@@ -1,6 +1,4 @@
-`checkZone` <-
-function(from, zones, checkz, nofsets, ib, ellipse) {
-    
+`checkZone` <- function(from, zones, checkz, nofsets, ib, ellipse) {
     fromz <- ib[ib$s == nofsets & ib$v == as.numeric(ellipse) & ib$i == from, ]
     toz <- ib[ib$s == nofsets & ib$v == as.numeric(ellipse) & ib$i %in% zones[!checkz], ]
     toz <- toz[toz$b %in% fromz$b, , drop = FALSE]

@@ -1,5 +1,5 @@
 Package: venn
-Version: 1.11-2
+Version: 1.11-3
 Title: Draw Venn Diagrams
 Authors@R: person(given = "Adrian", family = "Dusa",
                   role = c("aut", "cre", "cph"),

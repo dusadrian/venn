@@ -4,6 +4,8 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
+#     * Redistributions of data must cite this package according to the
+#       citation() command specific to this R package.
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above copyright
@@ -27,7 +29,7 @@
     rules, zcolor = "bw", ellipse = FALSE, opacity = 0.3, allborders = TRUE,
     box = TRUE, gvenn = NULL, ...
 ) {
-    sets <- getSets()
+    # sets <- getSets()
     zeroset <- matrix(c(0, 1000, 1000, 0, 0, 0, 0, 1000, 1000, 0), ncol = 2)
     colnames(zeroset) <- c("x", "y")
 

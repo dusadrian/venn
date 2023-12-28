@@ -4,6 +4,8 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
+#     * Redistributions of data must cite this package according to the
+#       citation() command specific to this R package.
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above copyright
@@ -33,9 +35,9 @@
         admisc::stopError("Argument <x> is missing.")
     }
 
-    icoords <- getIntCoords()
-    scoords <- getSetCoords()
-    ints <- getInts()
+    # icoords <- getIntCoords()
+    # scoords <- getSetCoords()
+    # ints <- getInts()
 
     dots <- list(...)
     counts <- dots$counts

@@ -8,3 +8,5 @@
 *.RData
 *.Ruserdata
 *.DS_Store
+.Rproj.user
+venn.Rproj

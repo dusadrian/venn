@@ -5,7 +5,8 @@
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
 #     * Redistributions of contained data must cite this package according to
-#       the citation() command specific to this R package.
+#       the citation("venn") command specific to this R package, along with the
+#       appropriate weblink to the CRAN package "venn".
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above copyright
@@ -84,16 +85,16 @@
     if (ggplot) {
         ilcs <- ilcs * 2.5 / 0.6
         sncs <- sncs * 3.5 / 0.85
-        if (
-            !requireNamespace("ggplot2", quietly = TRUE) |
-            !requireNamespace("ggpolypath", quietly = TRUE)
-        ) {
-            admisc::stopError(
+        ggplot2 <- eval(parse(text = "requireNamespace('ggplot2', quietly = TRUE)"))
+        ggpolypath <- eval(parse(text = "requireNamespace('ggpolypath', quietly = TRUE)"))
+        if (!ggplot2 | !ggpolypath) {
+            message(
                 paste(
                     "Packages \"ggplot2\" and \"ggpolypath\" are needed",
-                    "to make this work, please install."
+                    "to create ggplot diagrams, please install."
                 )
             )
+            return(NULL)
         }
     }
 
@@ -297,11 +298,13 @@
                             )
                         }
                         else {
-                            gvenn <- gvenn + ggpolypath::geom_polypath(
-                                polygons,
-                                rule = "evenodd",
-                                col = color
-                            )
+                            gvenn <- gvenn + eval(parse(text = paste(
+                                "ggpolypath::geom_polypath(",
+                                    "polygons,",
+                                    "rule = 'evenodd',",
+                                    "col = color",
+                                ")"
+                            )))
                         }
 
                     }
@@ -317,11 +320,13 @@
                             polygon(plotdata, col = color)
                         }
                         else {
-                            gvenn <- gvenn + ggplot2::geom_polygon(
-                                data = plotdata,
-                                ggplot2::aes(x, y),
-                                fill = color
-                            )
+                            gvenn <- gvenn + eval(parse(text = paste(
+                                "ggplot2::geom_polygon(",
+                                    "data = plotdata,",
+                                    "ggplot2::aes(x, y),",
+                                    "fill = color",
+                                ")"
+                            )))
                         }
                     }
                 }
@@ -361,11 +366,13 @@
                             )
                         }
                         else {
-                            gvenn <- gvenn + ggpolypath::geom_polypath(
-                                polygons,
-                                rule = "evenodd",
-                                col = ttcolors[i]
-                            )
+                            gvenn <- gvenn + eval(parse(text = paste(
+                                "ggpolypath::geom_polypath(",
+                                    "polygons,",
+                                    "rule = 'evenodd',",
+                                    "col = ttcolors[i]",
+                                ")"
+                            )))
                         }
 
                         zones <- zones[-1]
@@ -381,11 +388,13 @@
                         polygon(plotdata, col = ttcolors[i])
                     }
                     else {
-                        gvenn <- gvenn + ggplot2::geom_polygon(
-                            data = plotdata,
-                            ggplot2::aes(x, y),
-                        fill = ttcolors[i]
-                            )
+                        gvenn <- gvenn + eval(parse(text = paste(
+                            "ggplot2::geom_polygon(",
+                                "data = plotdata,",
+                                "ggplot2::aes(x, y),",
+                                "fill = ttcolors[i]",
+                            ")"
+                        )))
                     }
                 }
             }
@@ -652,11 +661,13 @@
         if (!is.null(ilabels)) {
             if (ggplot) {
                 for (i in which(ilabels != "")) {
-                    gvenn <- gvenn + ggplot2::annotate("text",
-                        x = icoords$x[i], y = icoords$y[i],
-                        label = ilabels[i],
-                        size = ilcs
-                    )
+                    gvenn <- gvenn + eval(parse(text = paste(
+                        "ggplot2::annotate('text',",
+                            "x = icoords$x[i], y = icoords$y[i],",
+                            "label = ilabels[i],",
+                            "size = ilcs",
+                        ")"
+                    )))
                 }
             }
             else {
@@ -760,11 +771,13 @@
 
     if (ggplot) {
         for (i in seq(length(snames))) {
-            gvenn <- gvenn + ggplot2::annotate("text",
-                x = scoords$x[i], y = scoords$y[i],
-                label = snames[i],
-                size = sncs
-            )
+            gvenn <- gvenn + eval(parse(text = paste(
+                "ggplot2::annotate('text',",
+                    "x = scoords$x[i], y = scoords$y[i],",
+                    "label = snames[i],",
+                    "size = sncs",
+                ")"
+            )))
         }
     }
     else {
@@ -801,42 +814,58 @@
         }
         else {
             gvenn <- gvenn +
-            ggplot2::annotate("rect",
-                xmin = 10, xmax = 32, ymin = -44, ymax = -22,
-                fill = ttcolors[1],
-                col = "black"
-            ) +
-            ggplot2::annotate("rect",
-                xmin = 120, xmax = 142, ymin = -44, ymax = -22,
-                fill = ttcolors[2],
-                col = "black"
-            ) +
-            ggplot2::annotate("rect",
-                xmin = 230, xmax = 252, ymin = -44, ymax = -22,
-                fill = ttcolors[3],
-                col = "black"
-            ) +
-            ggplot2::annotate("rect",
-                xmin = 340, xmax = 362, ymin = -44, ymax = -22,
-                fill = ttcolors[4],
-                col = "black"
-            ) +
-            ggplot2::annotate("text",
-                x = 50, y = -34,
-                label = names(ttcolors)[1]
-            ) +
-            ggplot2::annotate("text",
-                x = 160, y = -34,
-                label = names(ttcolors)[2]
-            ) +
-            ggplot2::annotate("text",
-                x = 270, y = -34,
-                label = names(ttcolors)[3]
-            ) +
-            ggplot2::annotate("text",
-                x = 380, y = -34,
-                label = names(ttcolors)[4]
-            )
+            eval(parse(text = parse(
+                "ggplot2::annotate('rect',",
+                    "xmin = 10, xmax = 32, ymin = -44, ymax = -22,",
+                    "fill = ttcolors[1],",
+                    "col = 'black'",
+                ")"
+            ))) +
+            eval(parse(text = parse(
+                "ggplot2::annotate('rect',",
+                    "xmin = 120, xmax = 142, ymin = -44, ymax = -22,",
+                    "fill = ttcolors[2],",
+                    "col = 'black'",
+                ")"
+            ))) +
+            eval(parse(text = parse(
+                "ggplot2::annotate('rect',",
+                    "xmin = 230, xmax = 252, ymin = -44, ymax = -22,",
+                    "fill = ttcolors[3],",
+                    "col = 'black'",
+                ")"
+            ))) +
+            eval(parse(text = parse(
+                "ggplot2::annotate('rect',",
+                    "xmin = 340, xmax = 362, ymin = -44, ymax = -22,",
+                    "fill = ttcolors[4],",
+                    "col = 'black'",
+                ")"
+            ))) +
+            eval(parse(text = parse(
+                "ggplot2::annotate('text',",
+                    "x = 50, y = -34,",
+                    "label = names(ttcolors)[1]",
+                ")"
+            ))) +
+            eval(parse(text = parse(
+                "ggplot2::annotate('text',",
+                    "x = 160, y = -34,",
+                    "label = names(ttcolors)[2]",
+                ")"
+            ))) +
+            eval(parse(text = parse(
+                "ggplot2::annotate('text',",
+                    "x = 270, y = -34,",
+                    "label = names(ttcolors)[3]",
+                ")"
+            ))) +
+            eval(parse(text = parse(
+                "ggplot2::annotate('text',",
+                    "x = 380, y = -34,",
+                    "label = names(ttcolors)[4]",
+                ")"
+            )))
         }
     }
 

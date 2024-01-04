@@ -5,7 +5,8 @@
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
 #     * Redistributions of contained data must cite this package according to
-#       the citation() command specific to this R package.
+#       the citation("venn") command specific to this R package, along with the
+#       appropriate weblink to the CRAN package "venn".
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above copyright

@@ -5,7 +5,8 @@
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
 #     * Redistributions of contained data must cite this package according to
-#       the citation() command specific to this R package.
+#       the citation("venn") command specific to this R package, along with the
+#       appropriate weblink to the CRAN package "venn".
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above copyright
@@ -114,11 +115,14 @@
                 zones[[i]] <- getZones(rowns[[i]], nofsets, ellipse)
                 polygons <- rbind(zeroset, rep(NA, 2), zones[[i]][[1]])
                 polygons <- polygons[-nrow(polygons), ] # needed...?
+                color <- adjustcolor(zcolor[i], alpha.f = opacity)
 
                 if (is.null(gvenn)) {
-                    polypath(polygons, rule = "evenodd", col = adjustcolor(zcolor[i], alpha.f = opacity), border = NA)
+                    polypath(polygons, rule = "evenodd", col = color, border = NA)
                 } else {
-                    gvenn <- gvenn + ggpolypath::geom_polypath(polygons, rule = "evenodd", col = adjustcolor(zcolor[i], alpha.f = opacity))
+                    gvenn <- gvenn + eval(parse(text = 
+                        "ggpolypath::geom_polypath(polygons, rule = 'evenodd', col = color)"
+                    ))
                 }
             }
         }
@@ -128,7 +132,12 @@
             if (any(wholesets > 0)) {
                 for (i in which(wholesets > 0)) {
                     # [[1]] simulates getZones() because sometimes there might be multiple zones
-                    zones[[i]][[1]] <- sets[sets$s == nofsets & sets$v == as.numeric(ellipse) & sets$n == wholesets[i], c("x", "y")]
+                    zones[[i]][[1]] <- sets[
+                        sets$s == nofsets &
+                        sets$v == as.numeric(ellipse) &
+                        sets$n == wholesets[i],
+                        c("x", "y")
+                    ]
                 }
             }
 
@@ -141,11 +150,18 @@
 
             for (i in seq(length(zones))) {
                 if (!irregular[i]) {
+                    color <- adjustcolor(zcolor[i], alpha.f = opacity)
                     for (j in seq(length(zones[[i]]))) {
                         if (is.null(gvenn)) {
-                            polygon(zones[[i]][[j]], col = adjustcolor(zcolor[i], alpha.f = opacity), border = NA)
+                            polygon(zones[[i]][[j]], col = color, border = NA)
                         } else {
-                            gvenn <- gvenn + ggplot2::geom_polygon(data = zones[[i]][[j]], ggplot2::aes(x, y), fill = adjustcolor(zcolor[i], alpha.f = opacity))
+                            gvenn <- gvenn + eval(parse(text = paste(
+                                "ggplot2::geom_polygon(",
+                                    "data = zones[[i]][[j]],",
+                                    "ggplot2::aes(x, y),",
+                                    "fill = color",
+                                ")"
+                            )))
                         }
                     }
                 }
@@ -180,7 +196,12 @@
             lines(zeroset)
         }
         else {
-            gvenn <- gvenn + ggplot2::geom_path(data = as.data.frame(zeroset), ggplot2::aes(x, y))
+            gvenn <- gvenn + eval(parse(text = paste(
+                "ggplot2::geom_path(",
+                    "data = as.data.frame(zeroset),",
+                    "ggplot2::aes(x, y)",
+                ")"
+            )))
         }
     }
 
@@ -205,7 +226,13 @@
                 start <- 1
                 for (b in seq(length(breaks))) {
                     if (b > 1) start <- breaks[b - 1] + 1
-                    gvenn <- gvenn + ggplot2::geom_polygon(data = temp[seq(start, breaks[b] - 1), ], ggplot2::aes(x, y), fill = adjustcolor(zcolor[b], alpha.f = opacity))
+                    gvenn <- gvenn + eval(parse(text = paste(
+                        "ggplot2::geom_polygon(",
+                            "data = temp[seq(start, breaks[b] - 1), ],",
+                            "ggplot2::aes(x, y),",
+                            "fill = adjustcolor(zcolor[b], alpha.f = opacity)",
+                        ")"
+                    )))
                 }
             }
         }
@@ -226,7 +253,13 @@
                     start <- 1
                     for (b in seq(length(breaks))) {
                         if (b > 1) start <- breaks[b - 1] + 1
-                        gvenn <- gvenn + ggplot2::geom_path(ggplot2::aes(x, y), data = temp[seq(start, breaks[b] - 1), ], col = bcolor[i])
+                        gvenn <- gvenn + eval(parse(text = paste(
+                            "ggplot2::geom_path(",
+                                "ggplot2::aes(x, y),",
+                                "data = temp[seq(start, breaks[b] - 1), ],",
+                                "col = bcolor[i]",
+                            ")"
+                        )))
                     }
                 }
             }
@@ -257,12 +290,12 @@
                         eval(as.call(suppress))
                     }
                     else {
-                        seplines <- list(ggplot2::geom_path)
+                        seplines <- list(eval(parse(text = "ggplot2::geom_path")))
                         if (all(is.na(tail(plotdata, 1)))) {
                             # to remove the annoying warning "removed 1 row containing missing data"
                             plotdata <- plotdata[-nrow(plotdata), , drop = FALSE]
                         }
-                        seplines$mapping <- ggplot2::aes(x, y)
+                        seplines$mapping <- eval(parse(text = "ggplot2::aes(x, y)"))
                         seplines$data <- plotdata
                         for (j in names(other.args)) {
                             seplines[[j]] <- other.args[[j]][i]
@@ -284,7 +317,12 @@
                     start <- 1
                     for (b in seq(length(breaks))) {
                         if (b > 1) start <- breaks[b - 1] + 1
-                        gvenn <- gvenn + ggplot2::geom_path(ggplot2::aes(x, y), data = temp[seq(start, breaks[b] - 1), ])
+                        gvenn <- gvenn + eval(parse(text = paste(
+                            "ggplot2::geom_path(",
+                                "ggplot2::aes(x, y),",
+                                "data = temp[seq(start, breaks[b] - 1), ]",
+                            ")"
+                        )))
                     }
                 }
             }
@@ -304,7 +342,12 @@
                 start <- 1
                 for (b in seq(length(breaks))) {
                     if (b > 1) start <- breaks[b - 1] + 1
-                    gvenn <- gvenn + ggplot2::geom_path(ggplot2::aes(x, y), data = temp[seq(start, breaks[b] - 1), ])
+                    gvenn <- gvenn + eval(parse(text = paste(
+                        "ggplot2::geom_path(",
+                            "ggplot2::aes(x, y),",
+                            "data = temp[seq(start, breaks[b] - 1), ]",
+                        ")"
+                    )))
                 }
             }
         }
@@ -330,7 +373,13 @@
                         start <- 1
                         for (b in seq(length(breaks))) {
                             if (b > 1) start <- breaks[b - 1] + 1
-                            gvenn <- gvenn + ggplot2::geom_path(ggplot2::aes(x, y), data = temp[seq(start, breaks[b] - 1), ], col = bcolor[i])
+                            gvenn <- gvenn + eval(parse(text = paste(
+                                "ggplot2::geom_path(",
+                                    "ggplot2::aes(x, y),",
+                                    "data = temp[seq(start, breaks[b] - 1), ],",
+                                    "col = bcolor[i]",
+                                ")"
+                            )))
                         }
                     }
                 }
@@ -373,9 +422,9 @@
 
                                 if (b > 1) start <- breaks[b - 1] + 1
 
-                                seplines <- list(ggplot2::geom_path)
+                                seplines <- list(eval(parse(text = "ggplot2::geom_path")))
                                 seplines[["data"]] <- temp[seq(start, breaks[b] - 1), ]
-                                seplines[["mapping"]] <- ggplot2::aes(x, y)
+                                seplines[["mapping"]] <- eval(parse(text = "ggplot2::aes(x, y)"))
 
                                 if (any(names(other.args) == "col")) {
                                     other.args$col <- admisc::splitstr(other.args$col)

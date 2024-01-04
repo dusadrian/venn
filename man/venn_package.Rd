@@ -9,15 +9,16 @@ Draw Venn Diagrams
 }
 
 \description{
-Draws and displays Venn diagrams up to 7 sets, and any boolean union of set intersections.
+A close to zero dependency package to draw and display Venn diagrams, and any
+boolean union of set intersections.
 }
 
 \details{
     \tabular{ll}{
     Package: \tab venn\cr
     Type:    \tab Package\cr
-    Version: \tab 1.11-4\cr
-    Date:    \tab 2023-12-29\cr
+    Version: \tab 1.11-5\cr
+    Date:    \tab 2024-01-04\cr
     License: \tab GPL (>= 2)\cr
     }
 }

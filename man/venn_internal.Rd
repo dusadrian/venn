@@ -4,8 +4,6 @@
 \alias{openPlot}
 \alias{translate2}
 \alias{plotRules}
-\alias{getBorders}
-\alias{getSets}
 
 
 \title{Internal Functions}

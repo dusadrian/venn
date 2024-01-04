@@ -1,8 +1,6 @@
 export(checkZone,
        extractInfo,
-       getBorders,
        getCentroid,
-       getSets,
        getZones,
        openPlot,
        plotRules,

@@ -1,5 +1,7 @@
 Version 1.12
-    o New function extractInfo()
+    o New function extractInfo(), to allow extracting the counts or the actual
+      intersections between several sets, prior to drawing the diagram
+      (thanks to Mehrad Mahmoudian for the suggestion)
     o An error is generated if the input is a QCA truth table with more than
       seven explanatory conditions (thanks to Leo Gurtler for the report)
     o Argument "counts" is now deprecated, the same information can be passed to

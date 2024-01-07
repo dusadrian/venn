@@ -7,6 +7,8 @@
 #     * Redistributions of contained data must cite this package according to
 #       the citation("venn") command specific to this R package, along with the
 #       appropriate weblink to the CRAN package "venn".
+#     * Further use of the enclosed data in other R packages must list package
+#       "venn" as a hard dependency in the Imports: field.
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
 #     * Redistributions in binary form must reproduce the above copyright

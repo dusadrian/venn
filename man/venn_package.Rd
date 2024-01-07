@@ -17,8 +17,8 @@ boolean union of set intersections.
     \tabular{ll}{
     Package: \tab venn\cr
     Type:    \tab Package\cr
-    Version: \tab 1.11-5\cr
-    Date:    \tab 2024-01-04\cr
+    Version: \tab 1.11-6\cr
+    Date:    \tab 2024-01-07\cr
     License: \tab GPL (>= 2)\cr
     }
 }

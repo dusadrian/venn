@@ -4,6 +4,7 @@
 \alias{openPlot}
 \alias{translate2}
 \alias{plotRules}
+\alias{getSets}
 
 
 \title{Internal Functions}

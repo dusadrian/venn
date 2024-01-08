@@ -4,10 +4,10 @@
 # Redistribution and use in source and binary forms, with or without
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
-#     * Redistributions of contained data must cite this package according to
+#     * Redistributions of enclosed data must cite this package according to
 #       the citation("venn") command specific to this R package, along with the
 #       appropriate weblink to the CRAN package "venn".
-#     * Further use of the enclosed data in other R packages must list package
+#     * Redistributions of enclosed data in other R packages must list package
 #       "venn" as a hard dependency in the Imports: field.
 #     * Redistributions of source code must retain the above copyright
 #       notice, this list of conditions and the following disclaimer.
@@ -28,4 +28,9 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 # SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+`getBorders` <- function() return(borders)
+`getIB` <- function() return(ib)
+`getICoords` <- function() return(icoords)
+`getSCoords` <- function() return(scoords)
+`getInts` <- function() return(ints)
 `getSets` <- function() return(sets)

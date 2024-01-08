@@ -4,6 +4,11 @@
 \alias{openPlot}
 \alias{translate2}
 \alias{plotRules}
+\alias{getBorders}
+\alias{getIB}
+\alias{getICoords}
+\alias{getSCoords}
+\alias{getInts}
 \alias{getSets}
 
 

@@ -4,8 +4,6 @@ Version 1.12
       (thanks to Mehrad Mahmoudian for the suggestion)
     o An error is generated if the input is a QCA truth table with more than
       seven explanatory conditions (thanks to Leo Gurtler for the report)
-    o Argument "counts" is now deprecated, the same information can be passed to
-      the argument "ilabels"
 
 Version 1.11
     o Solved bug related plotting counts for QCA objects

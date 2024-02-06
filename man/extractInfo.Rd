@@ -16,9 +16,16 @@ extractInfo(
 }
 
 \arguments{
-  \item{x}{A list object containing set elements}
+  \item{x}{A list object containing set elements, or a list of binary values}
   \item{what}{What to extract}
   \item{use.names}{Logical, use the set names to indicate intersections}
+}
+
+\details{
+When the argument \bold{\code{x}} is a list, the counts are taken from the number
+of common values for each intersection, and when \bold{\code{x}} is a dataframe,
+(comprised of exclusively binary values 0 and 1) the counts are taken from the
+number of similar rows.
 }
 
 
@@ -29,13 +36,20 @@ A dataframe, when extracting the counts or a list if extracting intersections.
 \examples{
 
 set.seed(12345)
-x <- list(First = 1:20, Second = 10:30, Third = sample(25:50, 15))
+xlist <- list(A = 1:20, B = 10:30, C = sample(25:50, 15))
+xdf <- as.data.frame(matrix(
+  sample(0:1, 90, replace = TRUE),
+  ncol = 3
+))
+colnames(xdf) <- LETTERS[1:3]
 
-extractInfo(x) # counts by default
+extractInfo(xlist) # counts by default
 
-extractInfo(x, what = "intersections")
+extractInfo(xlist, what = "intersections")
 
-extractInfo(x, what = "both")
+extractInfo(xlist, what = "both")
+
+extractInfo(xdf)
 
 }
 

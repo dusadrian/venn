@@ -94,8 +94,8 @@ the intersection labels from their particular combinations of 0s and 1s.
 Finally, it can also be specified as \code{ilabels = "counts"}, for counting the
 frequency of appearance of each intersection. When the argument \bold{\code{x}}
 is a list, the counts are taken from the number of common values for each
-intersection, and when \bold{\code{x}} is a data frame, (comprised of exclusively
-boolean values 0 and 1) the counts are taken from the number of similar rows. If
+intersection, and when \bold{\code{x}} is a dataframe, (comprised of exclusively
+binary values 0 and 1) the counts are taken from the number of similar rows. If
 a particular intersection does not have any common values (or no rows), the
 count "0" is left blank and not displayed in the diagram.
 

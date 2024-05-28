@@ -1,6 +1,6 @@
-# Copyright (c) 2016-2023, Adrian Dusa
+# Copyright (c) 2016-2024, Adrian Dusa
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
@@ -16,7 +16,7 @@
 #       documentation and/or other materials provided with the distribution.
 #     * The names of its contributors may NOT be used to endorse or promote products
 #       derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -32,7 +32,7 @@
     fromz <- ib[ib$s == nofsets & ib$v == as.numeric(ellipse) & ib$i == from, ]
     toz <- ib[ib$s == nofsets & ib$v == as.numeric(ellipse) & ib$i %in% zones[!checkz], ]
     toz <- toz[toz$b %in% fromz$b, , drop = FALSE]
-    
+
     if (nrow(toz) > 0) {
         zs <- sort(unique(toz$i))
 

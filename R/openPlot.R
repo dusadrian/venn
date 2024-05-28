@@ -1,6 +1,6 @@
-# Copyright (c) 2016-2023, Adrian Dusa
+# Copyright (c) 2016-2024, Adrian Dusa
 # All rights reserved.
-# 
+#
 # Redistribution and use in source and binary forms, with or without
 # modification, in whole or in part, are permitted provided that the
 # following conditions are met:
@@ -16,7 +16,7 @@
 #       documentation and/or other materials provided with the distribution.
 #     * The names of its contributors may NOT be used to endorse or promote products
 #       derived from this software without specific prior written permission.
-# 
+#
 # THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
 # ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 # WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
@@ -33,9 +33,9 @@
     if (ggplot) {
         cf <- ggplot2::coord_fixed()
         cf$default <- TRUE
-        return(ggplot2::ggplot() + ggplot2::geom_blank() + 
+        return(ggplot2::ggplot() + ggplot2::geom_blank() +
             cf +
-            ggplot2::coord_fixed(xlim = c(0, 1000), ylim = c(0, 1000)) + 
+            ggplot2::coord_fixed(xlim = c(0, 1000), ylim = c(0, 1000)) +
             ggplot2::theme(axis.line = ggplot2::element_blank(),
                 axis.text.x = ggplot2::element_blank(),
                 axis.text.y = ggplot2::element_blank(),
@@ -60,7 +60,7 @@
             if (dev.cur() == 1) {
                 dev.new(width = (plotsize + 1)/2.54, height = (plotsize + 1)/2.54)
             }
-            
+
             par(new = FALSE, xpd = TRUE, mai = c(0.05, 0.05, 0.05, 0.05))
         }
 

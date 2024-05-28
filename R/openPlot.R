@@ -68,7 +68,7 @@
         plot(x = 0:1000, type = "n", axes = FALSE, asp = 1, xlab = "", ylab = "")
 
         if (!is.null(dots$main)) {
-            title(main = dots$main, line = ifelse(is.null(dots$line), -2, dots$line))
+            title(main = dots$main, line = ifelse(is.null(dots$line), -1, dots$line))
         }
     }
 }

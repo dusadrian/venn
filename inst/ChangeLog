@@ -1,3 +1,7 @@
+Version 1.13
+    o Bug fix displaying disjunctive expressions (thanks to Mostapha Ashour for
+      the report)
+
 Version 1.12
     o New function extractInfo(), to allow extracting the counts or the actual
       intersections between several sets, prior to drawing the diagram

@@ -424,7 +424,7 @@
         }
 
         # x <- admisc::splitstr(x) # this coerces to numbers, not good
-        x <- unlist(strsplit(gsub("[[:space:]]", "", x), split = ","))
+        x <- unlist(strsplit(gsub("[[:space:]]", "", x), split = ",|\\+"))
 
         if (all(grepl("[A-Za-z]", x))) { # x can be something like c("A", "B*c")
 

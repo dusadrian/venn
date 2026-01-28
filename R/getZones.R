@@ -127,7 +127,7 @@
 
         result <- list()
 
-        while(!all(checkz)) {
+        while (length(checkz)) {
             checkz <- checkZone(as.numeric(names(checkz)[1]), area, checkz, nofsets, ib, ellipse)
 
             result[[length(result) + 1]] <- as.numeric(names(checkz)[checkz])

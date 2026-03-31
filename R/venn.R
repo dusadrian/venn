@@ -34,6 +34,11 @@
     box = TRUE, par = TRUE, ggplot = FALSE, ...
 ) {
 
+    if (isTRUE(par) && !ggplot && dev.cur() != 1) {
+        oldpar <- par(c("new", "xpd", "mai"))
+        on.exit(par(oldpar), add = TRUE)
+    }
+
     if (missing(x)) {
         admisc::stopError("Argument <x> is missing.")
     }

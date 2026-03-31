@@ -3,6 +3,7 @@ Version 1.13
       the report)
     o Bug fix in function getZones(), the function was incorrectly omitting
       one zone (thanks to Pierre Chausse for the report and for the fix)
+    o plot parameters are now restored on exit
 
 Version 1.12
     o New function extractInfo(), to allow extracting the counts or the actual
